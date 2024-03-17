@@ -1,48 +1,16 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import React, { useState } from "react";
-import styled from "styled-components";
 import { auth } from "../firebase";
-import { useNavigate } from "react-router-dom";
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 400px;
-  height: 100%;
-  padding: 50px 0;
-`;
-
-const Title = styled.h2`
-  font-size: 24px;
-`;
-
-const Form = styled.form`
-  margin-top: 50px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-`;
-
-const Input = styled.input`
-  padding: 10px 20px;
-  border-radius: 50px;
-  border: none;
-  width: 100%;
-  font-size: 16px;
-  &[type="submit"] {
-    cursor: pointer;
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-`;
-
-const Error = styled.span`
-  font-weight: bold;
-  color: tomato;
-`;
+import { Link, useNavigate } from "react-router-dom";
+import { FirebaseError } from "firebase/app";
+import {
+  Wrapper,
+  Form,
+  Input,
+  Switcher,
+  Title,
+  Error,
+} from "../components/auth-components";
 
 export default function CreateAccount() {
   const navigate = useNavigate();
@@ -66,6 +34,7 @@ export default function CreateAccount() {
   };
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError("");
     if (isLoading || name === "" || email === "" || password === "") return;
     try {
       setLoading(true);
@@ -84,6 +53,9 @@ export default function CreateAccount() {
       // redirect to the home page
     } catch (e) {
       // setError
+      if (e instanceof FirebaseError) {
+        setError(e.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -125,6 +97,9 @@ export default function CreateAccount() {
         />
       </Form>
       {error !== "" ? <Error>{error}</Error> : null}
+      <Switcher>
+        Already an account? <Link to="/login">Log in </Link>
+      </Switcher>
     </Wrapper>
   );
 }
