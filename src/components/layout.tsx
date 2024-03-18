@@ -2,7 +2,10 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { auth } from "../firebase";
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
 const Menu = styled.nav``;
 
