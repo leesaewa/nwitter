@@ -5,6 +5,10 @@ import { auth } from "../firebase";
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
+  border: 1px solid red;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 `;
 
 const Menu = styled.nav``;
