@@ -1,5 +1,7 @@
+import { addDoc, collection } from "firebase/firestore";
 import React, { useState } from "react";
 import styled from "styled-components";
+import { auth, db } from "../firebase";
 
 const Form = styled.form`
   border: 1px solid red;
@@ -13,6 +15,7 @@ const TextArea = styled.textarea`
   border: 1px solid aliceblue;
   border-radius: 6px;
   resize: none;
+  color: aliceblue;
 
   &::placeholder {
     font-size: 16px;
@@ -30,7 +33,7 @@ const AttackFileInput = styled.input`
   display: none;
 `;
 
-const SubmitBtn = styled.button`
+const SubmitBtn = styled.input`
   cursor: pointer;
   background-color: black;
   border: 1px solid aliceblue;
@@ -49,9 +52,6 @@ export default function PostTweetForm() {
   const [isLoading, setLoading] = useState(false);
   const [tweet, setTweet] = useState("");
   const [file, setFile] = useState<File | null>(null);
-  const submitBtn = (e) => {
-    e.preventDefault();
-  };
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTweet(e.target.value);
   };
@@ -61,9 +61,33 @@ export default function PostTweetForm() {
       setFile(files[0]);
     }
   };
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const user = auth.currentUser;
+
+    if (!user || isLoading || tweet === "" || tweet.length > 180) return;
+
+    try {
+      setLoading(true);
+      await addDoc(collection(db, "tweets"), {
+        tweet,
+        createdAt: Date.now(),
+        username: user.displayName || "Anonymous",
+        userId: user.uid,
+      }); //새로운 document 생성
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // const submitBtn = (e) => {
+  //   e.preventDefault();
+  // };
 
   return (
-    <Form>
+    <Form onSubmit={onSubmit}>
       <TextArea
         maxLength={180}
         onChange={onChange}
@@ -79,9 +103,13 @@ export default function PostTweetForm() {
         id="file"
         accept="image/*"
       />
-      <SubmitBtn type="submit" onClick={submitBtn}>
-        {isLoading ? "Loading..." : "Post!"}
-      </SubmitBtn>
+      <SubmitBtn
+        type="submit"
+        value={isLoading ? "Posting..." : "Post Tweet"}
+      />
+      {/* <SubmitBtn type="submit" onClick={submitBtn}>
+        {isLoading ? "Posting..." : "Post Tweet"}
+      </SubmitBtn> */}
     </Form>
   );
 }
