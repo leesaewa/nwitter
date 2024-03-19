@@ -1,7 +1,8 @@
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { auth, db } from "../firebase";
+import { auth, db, storage } from "../firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const Form = styled.form`
   border: 1px solid red;
@@ -57,8 +58,14 @@ export default function PostTweetForm() {
   };
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
+    const maxFileSize = 1024 * 1024 * 2; // 2MB로 설정
     if (files && files.length === 1) {
-      setFile(files[0]);
+      const selectedFile = files[0];
+      if (selectedFile.size <= maxFileSize) {
+        setFile(selectedFile);
+      } else {
+        alert("파일 크기가 너무 큽니다. 2MB 이하의 파일을 선택해주세요.");
+      }
     }
   };
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -69,22 +76,29 @@ export default function PostTweetForm() {
 
     try {
       setLoading(true);
-      await addDoc(collection(db, "tweets"), {
+      const doc = await addDoc(collection(db, "tweets"), {
         tweet,
         createdAt: Date.now(),
         username: user.displayName || "Anonymous",
         userId: user.uid,
       }); //새로운 document 생성
+      if (file) {
+        const locationRef = ref(
+          storage,
+          `tweets/${user.uid}-${user.displayName}/${doc.id}`
+        );
+        const result = await uploadBytes(locationRef, file);
+        const url = await getDownloadURL(result.ref);
+        await updateDoc(doc, { photo: url });
+      }
+      setTweet("");
+      setFile(null);
     } catch (e) {
       console.log(e);
     } finally {
       setLoading(false);
     }
   };
-
-  // const submitBtn = (e) => {
-  //   e.preventDefault();
-  // };
 
   return (
     <Form onSubmit={onSubmit}>
@@ -93,6 +107,7 @@ export default function PostTweetForm() {
         onChange={onChange}
         value={tweet}
         placeholder="What is happening?"
+        required
       />
       <AttackFileButton htmlFor="file">
         {file ? "Photo added" : "Add photo"}
@@ -107,9 +122,6 @@ export default function PostTweetForm() {
         type="submit"
         value={isLoading ? "Posting..." : "Post Tweet"}
       />
-      {/* <SubmitBtn type="submit" onClick={submitBtn}>
-        {isLoading ? "Posting..." : "Post Tweet"}
-      </SubmitBtn> */}
     </Form>
   );
 }
