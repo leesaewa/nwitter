@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { ITweet } from "./timeline";
 import { auth, db, storage } from "../firebase";
-import { deleteDoc, doc } from "firebase/firestore";
+import { collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
+import { ChangeEvent, useState } from "react";
 
 const Wrapper = styled.div`
   border: 1px solid green;
@@ -32,17 +33,23 @@ const Photo = styled.img`
   width: 100%;
 `;
 
-const DeleteBtn = styled.button`
-  cursor: pointer;
+const ButtonWrapper = styled.div`
   position: absolute;
   right: 0;
   top: 0;
+
+  button {
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    font-size: 14px;
+    padding: 4px 10px;
+  }
+`;
+
+const DeleteBtn = styled.button`
   background-color: maroon;
-  border-radius: 5px;
-  border: 1px solid transparent;
   color: white;
-  font-size: 14px;
-  padding: 4px 10px;
 
   &:hover {
     background-color: aliceblue;
@@ -50,8 +57,23 @@ const DeleteBtn = styled.button`
   }
 `;
 
+const EditBtn = styled.button`
+  background-color: cadetblue;
+  &:hover {
+    background-color: aliceblue;
+  }
+  &.btn-save {
+    background-color: cornflowerblue;
+  }
+  &.btn-cancel {
+    background-color: cornsilk;
+  }
+`;
+
 export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
   const user = auth.currentUser;
+  const [edit, setEdit] = useState(false);
+  const [editedTweet, setEditedTweet] = useState(tweet);
 
   const onDelete = async () => {
     const confirmDelete = confirm(
@@ -71,13 +93,56 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
     }
   };
 
+  const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setEditedTweet(e.target.value);
+  };
+
+  const onEdit = () => {
+    setEdit(true);
+  };
+  const onEditCancel = () => {
+    setEdit(false);
+    setEditedTweet(tweet);
+  };
+  const onEditSave = async () => {
+    console.log("save");
+    try {
+      const confirmSave = confirm("수정하시겠습니까?");
+      if (!confirmSave || user?.uid !== userId) return;
+      await updateDoc(doc(db, "tweets", id), {
+        tweet: editedTweet,
+      });
+      setEdit(false);
+    } catch (error) {
+      console.error("Error updating tweet", error);
+    }
+  };
+
   return (
     <Wrapper>
       <Column>
         <Username>{username}</Username>
-        <Payload>{tweet}</Payload>
+        {edit ? (
+          <textarea value={editedTweet} onChange={onChange}></textarea>
+        ) : (
+          <Payload>{tweet}</Payload>
+        )}
         {user?.uid === userId ? (
-          <DeleteBtn onClick={onDelete}>Delete</DeleteBtn>
+          <ButtonWrapper>
+            {edit ? (
+              <>
+                <EditBtn className="btn-save" onClick={onEditSave}>
+                  Save
+                </EditBtn>
+                <EditBtn className="btn-cancel" onClick={onEditCancel}>
+                  Cancel
+                </EditBtn>
+              </>
+            ) : (
+              <EditBtn onClick={onEdit}>Edit</EditBtn>
+            )}
+            <DeleteBtn onClick={onDelete}>Delete</DeleteBtn>
+          </ButtonWrapper>
         ) : null}
       </Column>
 
