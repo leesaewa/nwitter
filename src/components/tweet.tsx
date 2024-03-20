@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { ITweet } from "./timeline";
 import { auth, db, storage } from "../firebase";
-import { collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 import { ChangeEvent, useState } from "react";
 
@@ -37,31 +37,30 @@ const ButtonWrapper = styled.div`
   position: absolute;
   right: 0;
   top: 0;
+`;
 
-  button {
-    cursor: pointer;
-    border-radius: 5px;
-    border: 1px solid transparent;
-    font-size: 14px;
-    padding: 4px 10px;
+const Button = styled.button`
+  cursor: pointer;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  font-size: 14px;
+  padding: 4px 10px;
+  &:hover {
+    background-color: aliceblue;
   }
 `;
 
-const DeleteBtn = styled.button`
+const DeleteBtn = styled(Button)`
   background-color: maroon;
   color: white;
 
   &:hover {
-    background-color: aliceblue;
     color: maroon;
   }
 `;
 
-const EditBtn = styled.button`
+const EditBtn = styled(Button)`
   background-color: cadetblue;
-  &:hover {
-    background-color: aliceblue;
-  }
   &.btn-save {
     background-color: cornflowerblue;
   }
@@ -122,7 +121,7 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
     <Wrapper>
       <Column>
         <Username>{username}</Username>
-        {edit ? (
+        {user?.uid === userId && edit ? (
           <textarea value={editedTweet} onChange={onChange}></textarea>
         ) : (
           <Payload>{tweet}</Payload>
