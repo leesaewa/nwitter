@@ -5,7 +5,6 @@ import { auth, db, storage } from "../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const Form = styled.form`
-  border: 1px solid red;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -17,6 +16,8 @@ const TextArea = styled.textarea`
   border-radius: 6px;
   resize: none;
   color: aliceblue;
+  height: 100px;
+  margin-bottom: 20px;
 
   &::placeholder {
     font-size: 16px;
@@ -28,7 +29,19 @@ const TextArea = styled.textarea`
   }
 `;
 
-const AttackFileButton = styled.label``;
+const ButtonWrapper = styled.div`
+  display: flex;
+  column-gap: 20px;
+`;
+
+const AttackFileButton = styled.label`
+  cursor: pointer;
+  width: 40%;
+  background-color: aliceblue;
+  color: maroon;
+  border-radius: 6px;
+  text-align: center;
+`;
 
 const AttackFileInput = styled.input`
   display: none;
@@ -36,6 +49,7 @@ const AttackFileInput = styled.input`
 
 const SubmitBtn = styled.input`
   cursor: pointer;
+  width: 100%;
   background-color: black;
   border: 1px solid aliceblue;
   border-radius: 6px;
@@ -106,19 +120,21 @@ export default function PostTweetForm() {
         placeholder="What is happening?"
         required
       />
-      <AttackFileButton htmlFor="file">
-        {file ? "Photo added" : "Add photo"}
-      </AttackFileButton>
-      <AttackFileInput
-        onChange={onFileChange}
-        type="file"
-        id="file"
-        accept="image/*"
-      />
-      <SubmitBtn
-        type="submit"
-        value={isLoading ? "Posting..." : "Post Tweet"}
-      />
+      <ButtonWrapper>
+        <AttackFileButton htmlFor="addPhoto">
+          {file ? "Photo added" : "Add photo"}
+        </AttackFileButton>
+        <AttackFileInput
+          onChange={onFileChange}
+          type="file"
+          id="addPhoto"
+          accept="image/*"
+        />
+        <SubmitBtn
+          type="submit"
+          value={isLoading ? "Posting..." : "Post Tweet"}
+        />
+      </ButtonWrapper>
     </Form>
   );
 }

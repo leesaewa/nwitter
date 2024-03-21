@@ -11,13 +11,12 @@ import {
 import React, { ChangeEvent, useState } from "react";
 
 const Wrapper = styled.div`
-  border: 1px solid green;
   display: grid;
   grid-template-columns: 1fr 0.2fr;
+  margin-top: 30px;
 `;
 
 const Column = styled.div`
-  border: 1px solid blue;
   position: relative;
 `;
 
@@ -74,9 +73,13 @@ const EditBtn = styled(Button)`
   }
 `;
 
-const FileBtn = styled.label``;
+const FileBtn = styled.label`
+  cursor: pointer;
+`;
 
-const FileInput = styled.input``;
+const FileInput = styled.input`
+  display: none;
+`;
 
 export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
   const user = auth.currentUser;
@@ -201,9 +204,10 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
         ) : null}
       </Column>
 
-      {user?.uid === userId && edit ? (
+      {/* 이미지가 존재하고, 현재 사용자의 id가 트윗을 작성한 사용자의 ID와 동일하며, 수정 버튼을 클릭했을 때 표시 */}
+      {photo && user?.uid === userId && edit && (
         <Column>
-          <FileBtn htmlFor="file">
+          <FileBtn htmlFor="editThumbnail">
             {thumbnail ? (
               <Photo src={thumbnail} />
             ) : (
@@ -213,12 +217,14 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
           <FileInput
             onChange={onEditPhoto}
             type="file"
-            id="file"
+            id="editThumbnail"
             accept="image/*"
           />
         </Column>
-      ) : (
-        <Column>{photo ? <Photo src={photo}></Photo> : null}</Column>
+      )}
+      {/* 트윗을 작성한 사용자가 아니거나 수정 버튼을 클릭하지 않았을 때 트윗의 사진을 보여줌 */}
+      {(!photo || !(user?.uid === userId && edit)) && (
+        <Column>{photo && <Photo src={photo}></Photo>}</Column>
       )}
     </Wrapper>
   );
