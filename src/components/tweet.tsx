@@ -14,6 +14,7 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 0.2fr;
   margin-top: 30px;
+  column-gap: 20px;
 `;
 
 const Column = styled.div`
@@ -35,6 +36,12 @@ const Payload = styled.p`
 
 const Photo = styled.img`
   width: 100%;
+`;
+
+const Textarea = styled.textarea`
+  resize: none;
+  width: 100%;
+  height: 80%;
 `;
 
 const ButtonWrapper = styled.div`
@@ -181,7 +188,7 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
       <Column>
         <Username>{username}</Username>
         {user?.uid === userId && edit ? (
-          <textarea value={editedTweet} onChange={onChange}></textarea>
+          <Textarea value={editedTweet} onChange={onChange} />
         ) : (
           <Payload>{tweet}</Payload>
         )}
