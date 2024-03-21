@@ -5,11 +5,10 @@ import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import {
   deleteObject,
   getDownloadURL,
-  getStorage,
   ref,
   uploadBytes,
 } from "firebase/storage";
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 
 const Wrapper = styled.div`
   border: 1px solid green;
@@ -83,8 +82,10 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
   const user = auth.currentUser;
   const [edit, setEdit] = useState(false);
   const [editedTweet, setEditedTweet] = useState(tweet);
-  const [editPhoto, setEditPhoto] = useState(photo);
+  const [editPhoto, setEditPhoto] = useState<File | null>(null);
+  const [thumbnail, setThumbnail] = useState<string | null>(null);
 
+  // Delete tweet
   const onDelete = async () => {
     const confirmDelete = confirm(
       "Are you sure you want to delete this tweet?"
@@ -103,21 +104,24 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
     }
   };
 
-  const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  // When the tweet content changes
+  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEditedTweet(e.target.value);
   };
-  // const onEditPhoto = async (e: ChangeEvent<HTMLInputElement>) => {
-  //   setEditPhoto(e.target.value);
-  // };
 
+  // Activate tweet editing
   const onEdit = () => {
     setEdit(true);
   };
+
+  // Cancel tweet editing and revert to the previous state
   const onEditCancel = () => {
     setEdit(false);
     setEditedTweet(tweet);
-    setEditPhoto(photo);
+    setEditPhoto(null);
   };
+
+  // Save the edited tweet and update it in Firestore
   const onEditSave = async () => {
     try {
       const confirmSave = confirm("수정하시겠습니까?");
@@ -125,7 +129,7 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
       if (!confirmSave || user?.uid !== userId) return;
 
       if (editPhoto) {
-        const locationRef = ref(storage, `tweets/${user.uid}/${doc.id}`);
+        const locationRef = ref(storage, `tweets/${user.uid}/${id}`);
         const result = await uploadBytes(locationRef, editPhoto);
         const url = await getDownloadURL(result.ref);
         await updateDoc(doc(db, "tweets", id), {
@@ -133,32 +137,40 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
           tweet: editedTweet,
         });
       } else {
-        // 사진을 수정하지 않았을 경우에는 텍스트만 업데이트
         await updateDoc(doc(db, "tweets", id), { tweet: editedTweet });
       }
 
-      // if (editedTweet === tweet && editPhoto === tweet) {
-      //   alert("수정사항이 없습니다.");
-      //   setEdit(false);
-      // } else {
-      // await updateDoc(doc(db, "tweets", id), {
-      //   tweet: editedTweet,
-      //   photo: editPhoto,
-      // });
-
       alert("수정했습니다.");
       setEdit(false);
-      // }
     } catch (error) {
       console.error("Error updating tweet", error);
     }
   };
 
-  const onEditPhoto = (e) => {
-    if (e.target.files) {
-      const selectedFile = e.target.files[0];
-      setEditPhoto(selectedFile);
+  // Modify the image uploaded in the tweet
+  const onEditPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Check if the file size exceeds 2MB
+    const maxFileSize = file.size / (1024 * 1024);
+    if (maxFileSize > 2) {
+      alert("파일 크기가 너무 큽니다. 2MB 이하의 파일을 선택해주세요.");
+      e.target.value = "";
+      setEditPhoto(null);
+      return;
     }
+    // Display a thumbnail preview of the image
+    const thumbnail = new FileReader();
+    thumbnail.onload = () => {
+      if (thumbnail.result) {
+        const thumbnailUrl = thumbnail.result.toString();
+        setThumbnail(thumbnailUrl);
+      }
+    };
+    thumbnail.readAsDataURL(file);
+
+    setEditPhoto(file);
   };
 
   return (
@@ -191,7 +203,13 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
 
       {user?.uid === userId && edit ? (
         <Column>
-          <FileBtn htmlFor="file">edit</FileBtn>
+          <FileBtn htmlFor="file">
+            {thumbnail ? (
+              <Photo src={thumbnail} />
+            ) : (
+              <Photo src={photo}></Photo>
+            )}
+          </FileBtn>
           <FileInput
             onChange={onEditPhoto}
             type="file"
