@@ -84,17 +84,19 @@ export default function Profile() {
   const [editName, setEditName] = useState(user?.displayName ?? "");
 
   const onAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
-    if (!user) return;
-    if (files && files.length === 1) {
-      const file = files[0];
-      const locationRef = ref(storage, `avatars/${user.uid}`);
-      const result = await uploadBytes(locationRef, file);
-      const avatarUrl = await getDownloadURL(result.ref);
-      setAvatar(avatarUrl);
-      await updateProfile(user, { photoURL: avatarUrl });
-    }
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const storageRef = ref(storage, `avatars/${user?.uid}`);
+    await uploadBytes(storageRef, file);
+    const downloadURL = await getDownloadURL(storageRef);
+    setAvatar(downloadURL);
   };
+
+  const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditName(e.target.value);
+  };
+
   const fetchTweets = async () => {
     const tweetQuery = query(
       collection(db, "tweets"),
@@ -122,19 +124,33 @@ export default function Profile() {
   const onEditCancel = () => {
     setEdit(false);
     setEditName(user?.displayName ?? "");
-  };
-  const onEditSave = async () => {
-    confirm("수정하시겠습니까?");
-    if (user) {
-      await updateProfile(user, { displayName: editName });
-      alert("수정했습니다.");
-      setEdit(false);
-    }
-  };
-  const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditName(e.target.value);
+    // setAvatar(null);
+    setAvatar(user?.photoURL);
   };
 
+  const onEditSave = async () => {
+    const confirmResult = window.confirm("수정하시겠습니까?");
+    if (!confirmResult) return;
+
+    if (editName === user?.displayName && !avatar) {
+      alert("수정할 내용이 없습니다.");
+      setEdit(false);
+      return;
+    }
+
+    if (user) {
+      const updates = {};
+      if (editName !== user.displayName) {
+        updates.displayName = editName; // 이름이 변경됐을 때만 저장
+      }
+      if (avatar !== user.photoURL) {
+        updates.photoURL = avatar;
+      }
+
+      await updateProfile(user, updates);
+    }
+    setEdit(false);
+  };
   useEffect(() => {
     fetchTweets();
   }, []);
