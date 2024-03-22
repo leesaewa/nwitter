@@ -46,16 +46,20 @@ const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
   }
   body {
-    background-color: black;
+    background-color: burlywood;
     color:white;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
+
+  .container{
+border:1px solid red
+  }
 `;
 
-const Wrapper = styled.div`
-  height: 100vh;
+const Container = styled.div`
+  /* height: 100vh;
   display: flex;
-  justify-content: center;
+  justify-content: center; */
 `;
 
 function App() {
@@ -70,10 +74,10 @@ function App() {
   }, []);
 
   return (
-    <Wrapper>
+    <Container className="container">
       <GlobalStyles />
       {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
-    </Wrapper>
+    </Container>
   );
 }
 

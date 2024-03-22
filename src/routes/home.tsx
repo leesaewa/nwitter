@@ -2,7 +2,7 @@ import styled from "styled-components";
 import PostTweetForm from "../components/post-tweet-form";
 import Timeline from "../components/timeline";
 
-const Wrapper = styled.div`
+const Container = styled.div`
   width: 100%;
   /* display: grid;
   grid-template-rows: 1fr 5fr;
@@ -12,9 +12,9 @@ const Wrapper = styled.div`
 
 export default function Home() {
   return (
-    <Wrapper>
+    <Container className="container">
       <PostTweetForm />
       <Timeline />
-    </Wrapper>
+    </Container>
   );
 }

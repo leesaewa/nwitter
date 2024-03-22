@@ -21,7 +21,7 @@ export interface ITweet {
   createdAt: number;
 }
 
-const Wrapper = styled.div``;
+const Container = styled.div``;
 
 export default function Timeline() {
   const [tweets, setTweet] = useState<ITweet[]>([]);
@@ -60,10 +60,10 @@ export default function Timeline() {
   }, []);
 
   return (
-    <Wrapper>
+    <Container className="container">
       {tweets.map((tweet) => (
         <Tweet key={tweet.id} {...tweet} />
       ))}
-    </Wrapper>
+    </Container>
   );
 }

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Wrapper = styled.div`
+const Container = styled.div`
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -13,8 +13,8 @@ const Text = styled.span`
 
 export default function LoadingScreen() {
   return (
-    <Wrapper>
+    <Container className="container">
       <Text>Loading...</Text>
-    </Wrapper>
+    </Container>
   );
 }

@@ -4,7 +4,7 @@ import { auth } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
 import {
-  Wrapper,
+  Container,
   Form,
   Input,
   Switcher,
@@ -65,7 +65,7 @@ export default function CreateAccount() {
   };
 
   return (
-    <Wrapper>
+    <Container className="container">
       <Title>Join X</Title>
       <Form onSubmit={onSubmit}>
         <Input
@@ -102,6 +102,6 @@ export default function CreateAccount() {
         Already an account? <Link to="/login">Log in </Link>
       </Switcher>
       <GithubButton />
-    </Wrapper>
+    </Container>
   );
 }

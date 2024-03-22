@@ -4,7 +4,7 @@ import { FirebaseError } from "firebase/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import {
-  Wrapper,
+  Container,
   Form,
   Input,
   Switcher,
@@ -48,7 +48,7 @@ export default function CreateAccount() {
   };
 
   return (
-    <Wrapper>
+    <Container className="container">
       <Title>Login to X</Title>
       <Form onSubmit={onSubmit}>
         <Input
@@ -74,6 +74,6 @@ export default function CreateAccount() {
         Dont'have an account? <Link to="/create-account">Create one </Link>
       </Switcher>
       <GithubButton />
-    </Wrapper>
+    </Container>
   );
 }

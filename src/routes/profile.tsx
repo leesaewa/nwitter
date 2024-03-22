@@ -17,7 +17,7 @@ import { updateProfile } from "firebase/auth";
 import { ITweet } from "../components/timeline";
 import Tweet from "../components/tweet";
 
-const Wrapper = styled.div``;
+const Container = styled.div``;
 
 const EditContainer = styled.div`
   width: 100%;
@@ -49,7 +49,7 @@ const NameInput = styled.input``;
 
 const Tweets = styled.div``;
 
-const ButtonWrapper = styled.div`
+const ButtonContainer = styled.div`
   position: absolute;
   right: 0;
   top: 0;
@@ -161,9 +161,9 @@ export default function Profile() {
   }, []);
 
   return (
-    <Wrapper>
+    <Container className="container">
       <EditContainer>
-        <ButtonWrapper>
+        <ButtonContainer>
           <EditBtn className="btn-save" onClick={edit ? onEditSave : onEdit}>
             {edit ? "Save" : "Edit"}
           </EditBtn>
@@ -172,7 +172,7 @@ export default function Profile() {
               Cancel
             </EditBtn>
           )}
-        </ButtonWrapper>
+        </ButtonContainer>
 
         {edit ? (
           <>
@@ -232,6 +232,6 @@ export default function Profile() {
           <Tweet key={tweet.id} {...tweet} />
         ))}
       </Tweets>
-    </Wrapper>
+    </Container>
   );
 }

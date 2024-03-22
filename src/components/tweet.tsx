@@ -10,7 +10,7 @@ import {
 } from "firebase/storage";
 import React, { ChangeEvent, useState } from "react";
 
-const Wrapper = styled.div`
+const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 0.2fr;
   margin-top: 30px;
@@ -44,7 +44,7 @@ const Textarea = styled.textarea`
   height: 80%;
 `;
 
-const ButtonWrapper = styled.div`
+const ButtonContainer = styled.div`
   position: absolute;
   right: 0;
   top: 0;
@@ -192,7 +192,7 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
   };
 
   return (
-    <Wrapper>
+    <Container className="container">
       <Column>
         <Username>{username}</Username>
         {user?.uid === userId && edit ? (
@@ -201,7 +201,7 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
           <Payload>{tweet}</Payload>
         )}
         {user?.uid === userId ? (
-          <ButtonWrapper>
+          <ButtonContainer>
             {edit ? (
               <>
                 <EditBtn className="btn-save" onClick={onEditSave}>
@@ -215,7 +215,7 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
               <EditBtn onClick={onEdit}>Edit</EditBtn>
             )}
             <DeleteBtn onClick={onDelete}>Delete</DeleteBtn>
-          </ButtonWrapper>
+          </ButtonContainer>
         ) : null}
       </Column>
 
@@ -241,6 +241,6 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
       {(!photo || !(user?.uid === userId && edit)) && (
         <Column>{photo && <Photo src={photo}></Photo>}</Column>
       )}
-    </Wrapper>
+    </Container>
   );
 }
