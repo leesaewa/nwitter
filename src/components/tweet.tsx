@@ -135,23 +135,31 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
   const onEditSave = async () => {
     try {
       const confirmSave = confirm("수정하시겠습니까?");
-
       if (!confirmSave || user?.uid !== userId) return;
+
+      const updates = {};
+      let isUpdate = false;
 
       if (editPhoto) {
         const locationRef = ref(storage, `tweets/${user.uid}/${id}`);
         const result = await uploadBytes(locationRef, editPhoto);
         const url = await getDownloadURL(result.ref);
-        await updateDoc(doc(db, "tweets", id), {
-          photo: url,
-          tweet: editedTweet,
-        });
-      } else {
-        await updateDoc(doc(db, "tweets", id), { tweet: editedTweet });
+        updates.photo = url;
+        isUpdate = true;
       }
 
-      alert("수정했습니다.");
-      setEdit(false);
+      if (editedTweet !== tweet) {
+        updates.tweet = editedTweet;
+        isUpdate = true;
+      }
+
+      if (isUpdate) {
+        await updateDoc(doc(db, "tweets", id), updates);
+        alert("수정했습니다.");
+        setEdit(false);
+      } else {
+        alert("변경된 내용이 없습니다.");
+      }
     } catch (error) {
       console.error("Error updating tweet", error);
     }

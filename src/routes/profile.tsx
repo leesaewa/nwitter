@@ -129,27 +129,33 @@ export default function Profile() {
   };
 
   const onEditSave = async () => {
-    const confirmResult = window.confirm("수정하시겠습니까?");
-    if (!confirmResult) return;
+    try {
+      const confirmResult = window.confirm("수정하시겠습니까?");
+      if (!confirmResult) return;
 
-    if (editName === user?.displayName && !avatar) {
-      alert("수정할 내용이 없습니다.");
+      if (user) {
+        const updates = {};
+        let isUpdate = false;
+        if (editName !== user.displayName) {
+          updates.displayName = editName; // 이름이 변경됐을 때만 저장
+          isUpdate = true;
+        }
+        if (avatar !== user.photoURL) {
+          updates.photoURL = avatar;
+          isUpdate = true;
+        }
+
+        if (isUpdate) {
+          await updateProfile(user, updates);
+          alert("업데이트 되었습니다.");
+        } else {
+          alert("수정할 내용이 없습니다.");
+        }
+      }
       setEdit(false);
-      return;
+    } catch (error) {
+      console.error("error", error);
     }
-
-    if (user) {
-      const updates = {};
-      if (editName !== user.displayName) {
-        updates.displayName = editName; // 이름이 변경됐을 때만 저장
-      }
-      if (avatar !== user.photoURL) {
-        updates.photoURL = avatar;
-      }
-
-      await updateProfile(user, updates);
-    }
-    setEdit(false);
   };
   useEffect(() => {
     fetchTweets();
