@@ -2,13 +2,13 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { auth } from "../firebase";
 
-const Container = styled.div``;
+const Main = styled.main``;
 
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
+  max-width: 1800px;
   width: 100%;
   margin: 0 auto;
 `;
@@ -46,7 +46,7 @@ export default function Layout() {
   };
 
   return (
-    <Container className="container">
+    <Main>
       <Header>
         <LogoWrap>
           <Logo src="/logo.png" />
@@ -102,7 +102,7 @@ export default function Layout() {
           </MenuInner>
         </Menu>
       </Header>
-      {/* <Outlet /> */}
-    </Container>
+      <Outlet />
+    </Main>
   );
 }
