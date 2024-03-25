@@ -14,7 +14,7 @@ const Header = styled.header`
 `;
 
 const LogoWrap = styled.h1`
-  width: 200px;
+  width: 100px;
 `;
 const Logo = styled.img`
   width: 100%;
@@ -32,7 +32,7 @@ const MenuInner = styled.ul`
 
 const MenuItem = styled.li`
   border: 1px solid blue;
-  width: 100px;
+  width: 50px;
 `;
 
 export default function Layout() {

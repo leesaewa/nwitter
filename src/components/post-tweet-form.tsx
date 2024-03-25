@@ -11,17 +11,19 @@ const Form = styled.form`
 `;
 
 const TextArea = styled.textarea`
-  background-color: black;
-  border: 1px solid aliceblue;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: maroon;
+  border: 1px solid black;
   border-radius: 6px;
   resize: none;
   color: aliceblue;
   height: 100px;
   margin-bottom: 20px;
+  padding: 6px 8px;
 
   &::placeholder {
     font-size: 16px;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: aliceblue;
   }
   &:focus {
     outline: 2px solid #f0f8ff88;
