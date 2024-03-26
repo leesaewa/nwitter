@@ -54,6 +54,12 @@ const GlobalStyles = createGlobalStyle`
   .container{
 border:1px solid red
   }
+  a {
+    color:black
+  }
+  a:hover {
+    color:maroon;
+  }
 `;
 
 const Container = styled.div`
