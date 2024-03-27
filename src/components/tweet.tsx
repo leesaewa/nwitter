@@ -168,27 +168,26 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
   // Modify the image uploaded in the tweet
   const onEditPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (file) {
+      const maxFileSize = 1024 * 1024 * 2; // 2MB로 설정
+      if (file.size <= maxFileSize) {
+        setEditPhoto(file);
 
-    // Check if the file size exceeds 2MB
-    const maxFileSize = file.size / (1024 * 1024);
-    if (maxFileSize > 2) {
-      alert("파일 크기가 너무 큽니다. 2MB 이하의 파일을 선택해주세요.");
-      e.target.value = "";
-      setEditPhoto(null);
+        // Display a thumbnail preview of the image
+        const thumbnail = new FileReader();
+        thumbnail.onload = () => {
+          if (thumbnail.result) {
+            const thumbnailUrl = thumbnail.result.toString();
+            setThumbnail(thumbnailUrl);
+          }
+        };
+        thumbnail.readAsDataURL(file);
+      } else {
+        alert("파일 크기가 너무 큽니다. 2MB 이하의 파일을 선택해주세요.");
+      }
+    } else {
       return;
     }
-    // Display a thumbnail preview of the image
-    const thumbnail = new FileReader();
-    thumbnail.onload = () => {
-      if (thumbnail.result) {
-        const thumbnailUrl = thumbnail.result.toString();
-        setThumbnail(thumbnailUrl);
-      }
-    };
-    thumbnail.readAsDataURL(file);
-
-    setEditPhoto(file);
   };
 
   const onDeletePhoto = (e: React.MouseEvent<HTMLButtonElement>) => {

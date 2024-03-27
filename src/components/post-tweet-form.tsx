@@ -38,18 +38,24 @@ const ButtonWrapper = styled.div`
 
 const AttackFileButton = styled.label`
   cursor: pointer;
-  width: 40%;
-  background-color: aliceblue;
+  display: block;
+  width: 100%;
+  height: 100%;
   color: maroon;
-  border-radius: 6px;
   text-align: center;
 `;
 
 const PhotoInner = styled.div`
+  cursor: pointer;
   position: relative;
+  width: 40%;
+  background-color: aliceblue;
+  border-radius: 6px;
 `;
 
-const Photo = styled.img``;
+const Photo = styled.img`
+  width: 100%;
+`;
 
 const DeleteBtn = styled.button`
   cursor: pointer;
@@ -92,19 +98,26 @@ export default function PostTweetForm() {
     setTweet(e.target.value);
   };
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
+    const file = e.target.files?.[0];
+    if (file) {
       const maxFileSize = 1024 * 1024 * 2; // 2MB로 설정
-      if (selectedFile.size <= maxFileSize) {
-        setFile(selectedFile);
+      if (file.size <= maxFileSize) {
+        setFile(file);
+
+        // Display a thumbnail preview of the image
         const thumbnail = new FileReader();
         thumbnail.onload = () => {
-          setThumbnail(thumbnail.result as string);
+          if (thumbnail.result) {
+            const thumbnailUrl = thumbnail.result.toString();
+            setThumbnail(thumbnailUrl);
+          }
         };
-        thumbnail.readAsDataURL(selectedFile);
+        thumbnail.readAsDataURL(file);
       } else {
         alert("파일 크기가 너무 큽니다. 2MB 이하의 파일을 선택해주세요.");
       }
+    } else {
+      return;
     }
   };
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
