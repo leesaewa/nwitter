@@ -45,6 +45,23 @@ const AttackFileButton = styled.label`
   text-align: center;
 `;
 
+const PhotoInner = styled.div`
+  position: relative;
+`;
+
+const Photo = styled.img``;
+
+const DeleteBtn = styled.button`
+  cursor: pointer;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: 0;
+  background-color: maroon;
+  color: white;
+  border-radius: 4px;
+`;
+
 const AttackFileInput = styled.input`
   display: none;
 `;
@@ -69,16 +86,22 @@ export default function PostTweetForm() {
   const [isLoading, setLoading] = useState(false);
   const [tweet, setTweet] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [thumbnail, setThumbnail] = useState<string | null>(null);
+
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTweet(e.target.value);
   };
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
-    const maxFileSize = 1024 * 1024 * 2; // 2MB로 설정
-    if (files && files.length === 1) {
-      const selectedFile = files[0];
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      const maxFileSize = 1024 * 1024 * 2; // 2MB로 설정
       if (selectedFile.size <= maxFileSize) {
         setFile(selectedFile);
+        const thumbnail = new FileReader();
+        thumbnail.onload = () => {
+          setThumbnail(thumbnail.result as string);
+        };
+        thumbnail.readAsDataURL(selectedFile);
       } else {
         alert("파일 크기가 너무 큽니다. 2MB 이하의 파일을 선택해주세요.");
       }
@@ -112,6 +135,11 @@ export default function PostTweetForm() {
       setLoading(false);
     }
   };
+  const onDeletePhoto = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation(); // 클릭 이벤트 전파 방지
+    setFile(null);
+    setThumbnail(null);
+  };
 
   return (
     <Form onSubmit={onSubmit}>
@@ -123,15 +151,23 @@ export default function PostTweetForm() {
         required
       />
       <ButtonWrapper>
-        <AttackFileButton htmlFor="addPhoto">
-          {file ? "Photo added" : "Add photo"}
-        </AttackFileButton>
-        <AttackFileInput
-          onChange={onFileChange}
-          type="file"
-          id="addPhoto"
-          accept="image/*"
-        />
+        <PhotoInner>
+          <AttackFileButton htmlFor="addPhoto">
+            {file ? <Photo src={thumbnail} /> : "첨부"}
+          </AttackFileButton>
+          <AttackFileInput
+            onChange={onFileChange}
+            type="file"
+            id="addPhoto"
+            accept="image/*"
+          />
+          {file && (
+            <DeleteBtn type="button" onClick={onDeletePhoto}>
+              X
+            </DeleteBtn>
+          )}
+        </PhotoInner>
+
         <SubmitBtn
           type="submit"
           value={isLoading ? "Posting..." : "Post Tweet"}

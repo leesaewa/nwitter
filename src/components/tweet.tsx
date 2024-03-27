@@ -191,6 +191,12 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
     setEditPhoto(file);
   };
 
+  const onDeletePhoto = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation(); // 클릭 이벤트 전파 방지
+    setEditPhoto(null);
+    setThumbnail(null);
+  };
+
   return (
     <Container className="container">
       <Column>
@@ -235,6 +241,11 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
             id="editThumbnail"
             accept="image/*"
           />
+          {thumbnail && (
+            <DeleteBtn type="button" onClick={onDeletePhoto}>
+              X
+            </DeleteBtn>
+          )}
         </Column>
       )}
       {/* 트윗을 작성한 사용자가 아니거나 수정 버튼을 클릭하지 않았을 때 트윗의 사진을 보여줌 */}
