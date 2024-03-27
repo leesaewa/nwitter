@@ -49,7 +49,9 @@ export default function Layout() {
     <Main>
       <Header>
         <LogoWrap>
-          <Logo src="/logo.png" />
+          <Link to="/">
+            <Logo src="/logo.png" />
+          </Link>
         </LogoWrap>
         <Menu>
           <MenuInner>
