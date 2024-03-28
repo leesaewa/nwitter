@@ -142,6 +142,7 @@ export default function PostTweetForm() {
       }
       setTweet("");
       setFile(null);
+      setThumbnail(null);
     } catch (e) {
       console.log(e);
     } finally {
@@ -149,7 +150,6 @@ export default function PostTweetForm() {
     }
   };
   const onDeletePhoto = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation(); // 클릭 이벤트 전파 방지
     setFile(null);
     setThumbnail(null);
   };

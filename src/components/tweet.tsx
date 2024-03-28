@@ -9,6 +9,7 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import React, { ChangeEvent, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   display: grid;
@@ -21,7 +22,7 @@ const Column = styled.div`
   position: relative;
 `;
 
-const Username = styled.span`
+const Username = styled(Link)`
   display: block;
   font-size: 20px;
   font-weight: 600;
@@ -191,7 +192,6 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
   };
 
   const onDeletePhoto = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation(); // 클릭 이벤트 전파 방지
     setEditPhoto(null);
     setThumbnail(null);
   };
@@ -199,7 +199,7 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
   return (
     <Container className="container">
       <Column>
-        <Username>{username}</Username>
+        <Username to={`/profile/${userId}`}>{username}</Username>
         {user?.uid === userId && edit ? (
           <Textarea value={editedTweet} onChange={onChange} />
         ) : (
