@@ -30,6 +30,7 @@ export default function Channel() {
         const userData = snapshot.docs[0].data();
         setUserProfile({
           username: userData.username || "Anonymous",
+          avatar: userData.avatar || null,
         });
       } else {
         console.log("User not found");
@@ -73,9 +74,17 @@ export default function Channel() {
   return (
     <div>
       <div>
-        <h2>User Tweets</h2>
-
-        {userProfile && <span>{userProfile.username}</span>}
+        {userProfile && (
+          <div>
+            <span>{userProfile.username}</span>
+            {userProfile.avatar ? (
+              <img src={userProfile.avatar} alt="Avatar" />
+            ) : (
+              "유저 아바타 없음"
+            )}
+            {/* 추가된 부분: avatar photoUrl 출력 */}
+          </div>
+        )}
 
         <hr />
         <hr />

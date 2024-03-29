@@ -16,6 +16,7 @@ import {
 import { updateProfile } from "firebase/auth";
 import { ITweet } from "../components/timeline";
 import Tweet from "../components/tweet";
+import LoadingScreen from "../components/loading-screen";
 
 const Container = styled.div``;
 
@@ -78,6 +79,7 @@ const EditBtn = styled(Button)`
 
 export default function Profile() {
   const user = auth.currentUser;
+  const [isLoading, setLoading] = useState(true);
   const [avatar, setAvatar] = useState(user?.photoURL);
   const [tweets, setTweets] = useState<ITweet[]>([]);
   const [edit, setEdit] = useState(false);
@@ -158,80 +160,94 @@ export default function Profile() {
   };
   useEffect(() => {
     fetchTweets();
+    setLoading(false);
   }, []);
 
   return (
     <Container className="container">
-      <EditContainer>
-        <ButtonContainer>
-          <EditBtn className="btn-save" onClick={edit ? onEditSave : onEdit}>
-            {edit ? "Save" : "Edit"}
-          </EditBtn>
-          {edit && (
-            <EditBtn className="btn-cancel" onClick={onEditCancel}>
-              Cancel
-            </EditBtn>
-          )}
-        </ButtonContainer>
-
-        {edit ? (
-          <>
-            <AvatarUpload htmlFor="avatarUpload">
-              {avatar ? (
-                <AvatarImg src={avatar} />
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              )}
-            </AvatarUpload>
-            <AvatarInput
-              onChange={onAvatarChange}
-              type="file"
-              accept="image/*"
-              id="avatarUpload"
-            />
-            <Name>
-              <NameInput type="text" value={editName} onChange={onNameChange} />
-            </Name>
-          </>
-        ) : (
-          <>
-            {avatar ? (
-              <AvatarImg src={avatar} />
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="w-6 h-6"
+      {isLoading ? (
+        <LoadingScreen />
+      ) : (
+        <>
+          <EditContainer>
+            <ButtonContainer>
+              <EditBtn
+                className="btn-save"
+                onClick={edit ? onEditSave : onEdit}
               >
-                <path
-                  fillRule="evenodd"
-                  d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            )}
-            <Name>{user?.displayName ?? "Anonymous"}</Name>
-          </>
-        )}
-      </EditContainer>
+                {edit ? "Save" : "Edit"}
+              </EditBtn>
+              {edit && (
+                <EditBtn className="btn-cancel" onClick={onEditCancel}>
+                  Cancel
+                </EditBtn>
+              )}
+            </ButtonContainer>
 
-      <Tweets>
-        {tweets.map((tweet) => (
-          <Tweet key={tweet.id} {...tweet} />
-        ))}
-      </Tweets>
+            {edit ? (
+              <>
+                <AvatarUpload htmlFor="avatarUpload">
+                  {avatar ? (
+                    <AvatarImg src={avatar} />
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  )}
+                </AvatarUpload>
+                <AvatarInput
+                  onChange={onAvatarChange}
+                  type="file"
+                  accept="image/*"
+                  id="avatarUpload"
+                />
+                <Name>
+                  <NameInput
+                    type="text"
+                    value={editName}
+                    onChange={onNameChange}
+                  />
+                </Name>
+              </>
+            ) : (
+              <>
+                {avatar ? (
+                  <AvatarImg src={avatar} />
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                )}
+                <Name>{user?.displayName ?? "Anonymous"}</Name>
+              </>
+            )}
+          </EditContainer>
+
+          <Tweets>
+            {tweets.map((tweet) => (
+              <Tweet key={tweet.id} {...tweet} />
+            ))}
+          </Tweets>
+        </>
+      )}
     </Container>
   );
 }
