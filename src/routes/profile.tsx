@@ -241,11 +241,15 @@ export default function Profile() {
             )}
           </EditContainer>
 
-          <Tweets>
-            {tweets.map((tweet) => (
-              <Tweet key={tweet.id} {...tweet} />
-            ))}
-          </Tweets>
+          {tweets.length > 0 ? (
+            <Tweets>
+              {tweets.map((tweet) => (
+                <Tweet key={tweet.id} {...tweet} />
+              ))}
+            </Tweets>
+          ) : (
+            <span>not yet!</span>
+          )}
         </>
       )}
     </Container>

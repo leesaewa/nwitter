@@ -89,9 +89,11 @@ export default function Channel() {
         <hr />
         <hr />
 
-        {userTweets.map((tweet) => (
-          <Tweet key={tweet.id} {...tweet} />
-        ))}
+        {userTweets.length > 0 ? (
+          userTweets.map((tweet) => <Tweet key={tweet.id} {...tweet} />)
+        ) : (
+          <span>Not Yet!</span>
+        )}
       </div>
     </div>
   );
