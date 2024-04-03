@@ -89,7 +89,14 @@ const FileInput = styled.input`
   display: none;
 `;
 
-export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
+export default function Tweet({
+  username,
+  photo,
+  tweet,
+  userId,
+  id,
+  avatar,
+}: ITweet) {
   const user = auth.currentUser;
   const [edit, setEdit] = useState(false);
   const [editedTweet, setEditedTweet] = useState(tweet);
@@ -199,6 +206,7 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
   return (
     <Container className="container">
       <Column>
+        <img src={avatar} />
         <Username to={`/profile/${userId}`}>{username}</Username>
         {user?.uid === userId && edit ? (
           <Textarea value={editedTweet} onChange={onChange} />

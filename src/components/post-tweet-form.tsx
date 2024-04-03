@@ -133,6 +133,7 @@ export default function PostTweetForm() {
         createdAt: Date.now(),
         username: user.displayName || "Anonymous",
         userId: user.uid,
+        avatar: user.photoURL || null,
       }); //새로운 document 생성
       if (file) {
         const locationRef = ref(storage, `tweets/${user.uid}/${doc.id}`);

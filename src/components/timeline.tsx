@@ -19,6 +19,7 @@ export interface ITweet {
   userId: string;
   username: string;
   createdAt: number;
+  avatar: string;
 }
 
 const Container = styled.div``;
@@ -40,7 +41,8 @@ export default function Timeline() {
       // 실시간 트윗 : 스냅샷의 문서들을 반복하며 각각의 트윗을 객체로 변환하여 tweets 상태를 업데이트.
       unsubscribe = await onSnapshot(tweetsQuery, (snapshot) => {
         const tweets = snapshot.docs.map((doc) => {
-          const { tweet, createdAt, userId, username, photo } = doc.data();
+          const { tweet, createdAt, userId, username, photo, avatar } =
+            doc.data();
           return {
             id: doc.id,
             photo,
@@ -48,6 +50,7 @@ export default function Timeline() {
             userId,
             username,
             createdAt,
+            avatar,
           };
         });
         setTweet(tweets);
