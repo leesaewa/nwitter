@@ -15,6 +15,7 @@ import { Unsubscribe } from "firebase/auth";
 export interface ITweet {
   id: string;
   photo: string;
+  tweetTitle: string;
   tweet: string;
   userId: string;
   username: string;
@@ -41,12 +42,20 @@ export default function Timeline() {
       // 실시간 트윗 : 스냅샷의 문서들을 반복하며 각각의 트윗을 객체로 변환하여 tweets 상태를 업데이트.
       unsubscribe = await onSnapshot(tweetsQuery, (snapshot) => {
         const tweets = snapshot.docs.map((doc) => {
-          const { tweet, createdAt, userId, username, photo, avatar } =
-            doc.data();
+          const {
+            tweet,
+            createdAt,
+            userId,
+            username,
+            photo,
+            avatar,
+            tweetTitle,
+          } = doc.data();
           return {
             id: doc.id,
             photo,
             tweet,
+            tweetTitle,
             userId,
             username,
             createdAt,

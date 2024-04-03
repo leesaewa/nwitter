@@ -158,6 +158,7 @@ export default function Profile() {
       console.error("error", error);
     }
   };
+
   useEffect(() => {
     fetchTweets();
     setLoading(false);

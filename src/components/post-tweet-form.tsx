@@ -91,11 +91,15 @@ const SubmitBtn = styled.input`
 export default function PostTweetForm() {
   const [isLoading, setLoading] = useState(false);
   const [tweet, setTweet] = useState("");
+  const [tweetTitle, setTweetTitle] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [thumbnail, setThumbnail] = useState<string | null>(null);
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTweet(e.target.value);
+  };
+  const onTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTweetTitle(e.target.value);
   };
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -134,6 +138,7 @@ export default function PostTweetForm() {
         username: user.displayName || "Anonymous",
         userId: user.uid,
         avatar: user.photoURL || null,
+        tweetTitle,
       }); //새로운 document 생성
       if (file) {
         const locationRef = ref(storage, `tweets/${user.uid}/${doc.id}`);
@@ -142,6 +147,7 @@ export default function PostTweetForm() {
         await updateDoc(doc, { photo: url });
       }
       setTweet("");
+      setTweetTitle("");
       setFile(null);
       setThumbnail(null);
     } catch (e) {
@@ -157,6 +163,7 @@ export default function PostTweetForm() {
 
   return (
     <Form onSubmit={onSubmit}>
+      <input value={tweetTitle} onChange={onTitle} />
       <TextArea
         maxLength={180}
         onChange={onChange}

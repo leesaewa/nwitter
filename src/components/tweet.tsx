@@ -93,6 +93,7 @@ export default function Tweet({
   username,
   photo,
   tweet,
+  tweetTitle,
   userId,
   id,
   avatar,
@@ -206,6 +207,7 @@ export default function Tweet({
   return (
     <Container className="container">
       <Column>
+        <h2>{tweetTitle}</h2>
         <img src={avatar} />
         <Username to={`/profile/${userId}`}>{username}</Username>
         {user?.uid === userId && edit ? (
