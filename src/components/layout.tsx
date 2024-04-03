@@ -35,6 +35,8 @@ const MenuItem = styled.li`
   width: 50px;
 `;
 
+const Footer = styled.footer``;
+
 export default function Layout() {
   const navigate = useNavigate();
   const onLogOut = async () => {
@@ -105,6 +107,8 @@ export default function Layout() {
         </Menu>
       </Header>
       <Outlet />
+
+      <Footer></Footer>
     </Main>
   );
 }

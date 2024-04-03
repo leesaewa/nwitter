@@ -4,13 +4,13 @@ import Home from "./routes/home";
 import Profile from "./routes/profile";
 import Login from "./routes/login";
 import CreateAccount from "./routes/create-account";
-import styled, { createGlobalStyle } from "styled-components";
-import reset from "styled-reset";
 import { useEffect, useState } from "react";
 import LoadingScreen from "./components/loading-screen";
 import { auth } from "./firebase";
 import ProtectedRoute from "./components/protected-route";
 import Channel from "./routes/Channel";
+import GlobalStyles from "./style/GlobalStyles";
+import styled from "styled-components";
 
 const router = createBrowserRouter([
   {
@@ -44,28 +44,6 @@ const router = createBrowserRouter([
     element: <CreateAccount />,
   },
 ]);
-
-const GlobalStyles = createGlobalStyle`
-  ${reset};
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    background-color: burlywood;
-    color:white;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
-
-  .container{
-border:1px solid red
-  }
-  a {
-    color:black
-  }
-  a:hover {
-    color:maroon;
-  }
-`;
 
 const Container = styled.div`
   /* height: 100vh;

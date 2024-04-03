@@ -10,6 +10,7 @@ import {
 } from "firebase/storage";
 import React, { ChangeEvent, useState } from "react";
 import { Link } from "react-router-dom";
+import { Avatar, UserWrapper, Username } from "../style/Tweet";
 
 const Container = styled.div`
   display: grid;
@@ -20,15 +21,6 @@ const Container = styled.div`
 
 const Column = styled.div`
   position: relative;
-`;
-
-const Username = styled(Link)`
-  display: block;
-  font-size: 20px;
-  font-weight: 600;
-  padding-bottom: 8px;
-  margin-bottom: 8px;
-  border-bottom: 1px dashed aliceblue;
 `;
 
 const Payload = styled.p`
@@ -88,6 +80,8 @@ const FileBtn = styled.label`
 const FileInput = styled.input`
   display: none;
 `;
+
+const Title = styled.h2``;
 
 export default function Tweet({
   username,
@@ -207,9 +201,7 @@ export default function Tweet({
   return (
     <Container className="container">
       <Column>
-        <h2>{tweetTitle}</h2>
-        <img src={avatar} />
-        <Username to={`/profile/${userId}`}>{username}</Username>
+        <Title>{tweetTitle}</Title>
         {user?.uid === userId && edit ? (
           <Textarea value={editedTweet} onChange={onChange} />
         ) : (
@@ -232,6 +224,16 @@ export default function Tweet({
             <DeleteBtn onClick={onDelete}>Delete</DeleteBtn>
           </ButtonContainer>
         ) : null}
+
+        <UserWrapper>
+          <Link to={`/profile/${userId}`}>
+            <Avatar src={avatar || "/public/logo.png"} />
+            <div>
+              <Username>{username}</Username>
+              <Username className="hover">{username}</Username>
+            </div>
+          </Link>
+        </UserWrapper>
       </Column>
 
       {/* 이미지가 존재하고, 현재 사용자의 id가 트윗을 작성한 사용자의 ID와 동일하며, 수정 버튼을 클릭했을 때 표시 */}
