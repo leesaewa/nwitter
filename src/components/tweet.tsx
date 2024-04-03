@@ -227,7 +227,7 @@ export default function Tweet({
 
         <UserWrapper>
           <Link to={`/profile/${userId}`}>
-            <Avatar src={avatar || "/public/logo.png"} />
+            <Avatar src={avatar || "/logo.png"} />
             <div>
               <Username>{username}</Username>
               <Username className="hover">{username}</Username>

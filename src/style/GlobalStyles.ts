@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 
 const GlobalStyles = createGlobalStyle`
@@ -7,7 +7,7 @@ const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
   }
   body {
-    background-image:url('/public/paper.jpg');
+    background-image:url('/paper.jpg');
     color:white;
     font-family: "Hahmlet", serif;
   }
@@ -27,6 +27,10 @@ const GlobalStyles = createGlobalStyle`
   a:hover {
     color:maroon
   }
+
+
 `;
+
+export const Section = styled.section``;
 
 export default GlobalStyles;
