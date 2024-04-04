@@ -10,7 +10,7 @@ import {
 } from "firebase/storage";
 import React, { ChangeEvent, useState } from "react";
 import { Link } from "react-router-dom";
-import { Avatar, UserWrapper, Username } from "../style/Tweet";
+import { Avatar, UserWrapper, Username, Title } from "../style/Tweet";
 
 const Container = styled.div`
   display: grid;
@@ -36,6 +36,8 @@ const Textarea = styled.textarea`
   width: 100%;
   height: 80%;
 `;
+
+const Input = styled.input``;
 
 const ButtonContainer = styled.div`
   position: absolute;
@@ -81,13 +83,12 @@ const FileInput = styled.input`
   display: none;
 `;
 
-const Title = styled.h2``;
-
 export default function Tweet({
   username,
   photo,
   tweet,
-  tweetTitle,
+  headline,
+  subhead,
   userId,
   id,
   avatar,
@@ -95,6 +96,8 @@ export default function Tweet({
   const user = auth.currentUser;
   const [edit, setEdit] = useState(false);
   const [editedTweet, setEditedTweet] = useState(tweet);
+  const [editedHeadline, setEditedHeadline] = useState(headline);
+  const [editedSubhead, setEditedSubhead] = useState(subhead);
   const [editPhoto, setEditPhoto] = useState<File | null>(null);
   const [thumbnail, setThumbnail] = useState<string | null>(null);
 
@@ -112,14 +115,18 @@ export default function Tweet({
       }
     } catch (e) {
       console.log(e);
-    } finally {
-      //
     }
   };
 
   // When the tweet content changes
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEditedTweet(e.target.value);
+  };
+  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedHeadline(e.target.value);
+  };
+  const onsubheadChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedSubhead(e.target.value);
   };
 
   // Activate tweet editing
@@ -131,6 +138,8 @@ export default function Tweet({
   const onEditCancel = () => {
     setEdit(false);
     setEditedTweet(tweet);
+    setEditedHeadline(headline);
+    setEditedSubhead(subhead);
     setEditPhoto(null);
   };
 
@@ -153,6 +162,14 @@ export default function Tweet({
 
       if (editedTweet !== tweet) {
         updates.tweet = editedTweet;
+        isUpdate = true;
+      }
+      if (editedHeadline !== headline) {
+        updates.headline = editedHeadline;
+        isUpdate = true;
+      }
+      if (editedSubhead !== subhead) {
+        updates.subhead = editedSubhead;
         isUpdate = true;
       }
 
@@ -201,11 +218,23 @@ export default function Tweet({
   return (
     <Container className="container">
       <Column>
-        <Title>{tweetTitle}</Title>
         {user?.uid === userId && edit ? (
-          <Textarea value={editedTweet} onChange={onChange} />
+          <>
+            <div>
+              <Input value={editedHeadline} onChange={onTitleChange} />
+              {editedSubhead && (
+                <Input value={editedSubhead} onChange={onsubheadChange} />
+              )}
+            </div>
+
+            <Textarea value={editedTweet} onChange={onChange} />
+          </>
         ) : (
-          <Payload>{tweet}</Payload>
+          <>
+            <Title>{headline}</Title>
+            <Title>{subhead}</Title>
+            <Payload>{tweet}</Payload>
+          </>
         )}
         {user?.uid === userId ? (
           <ButtonContainer>
@@ -227,10 +256,16 @@ export default function Tweet({
 
         <UserWrapper>
           <Link to={`/profile/${userId}`}>
-            <Avatar src={avatar || "/logo.png"} />
+            <Avatar
+              src={avatar || "/logo.png"}
+              className={avatar ? "" : "no-img"}
+            />
             <div>
-              <Username>{username}</Username>
-              <Username className="hover">{username}</Username>
+              <em className="eng">reporter</em>
+              <p>
+                <Username>{username}</Username>
+                <Username className="hover">{username}</Username>
+              </p>
             </div>
           </Link>
         </UserWrapper>

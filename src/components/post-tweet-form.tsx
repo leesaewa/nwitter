@@ -31,6 +31,8 @@ const TextArea = styled.textarea`
   }
 `;
 
+const Label = styled.label``;
+
 const ButtonWrapper = styled.div`
   display: flex;
   column-gap: 20px;
@@ -91,15 +93,19 @@ const SubmitBtn = styled.input`
 export default function PostTweetForm() {
   const [isLoading, setLoading] = useState(false);
   const [tweet, setTweet] = useState("");
-  const [tweetTitle, setTweetTitle] = useState("");
+  const [headline, setHeadline] = useState("");
+  const [subhead, setSubhead] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [thumbnail, setThumbnail] = useState<string | null>(null);
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTweet(e.target.value);
   };
-  const onTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTweetTitle(e.target.value);
+  const onFirstTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setHeadline(e.target.value);
+  };
+  const onAccentTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSubhead(e.target.value);
   };
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -138,7 +144,8 @@ export default function PostTweetForm() {
         username: user.displayName || "Anonymous",
         userId: user.uid,
         avatar: user.photoURL || null,
-        tweetTitle,
+        headline,
+        subhead,
       }); //새로운 document 생성
       if (file) {
         const locationRef = ref(storage, `tweets/${user.uid}/${doc.id}`);
@@ -147,7 +154,8 @@ export default function PostTweetForm() {
         await updateDoc(doc, { photo: url });
       }
       setTweet("");
-      setTweetTitle("");
+      setHeadline("");
+      setSubhead("");
       setFile(null);
       setThumbnail(null);
     } catch (e) {
@@ -163,7 +171,19 @@ export default function PostTweetForm() {
 
   return (
     <Form onSubmit={onSubmit}>
-      <input value={tweetTitle} onChange={onTitle} />
+      <div>
+        <Label htmlFor="headline">헤드라인</Label>
+        <input
+          value={headline}
+          onChange={onFirstTitle}
+          id="headline"
+          required
+        />
+      </div>
+      <div>
+        <Label htmlFor="subhead">서브헤드</Label>
+        <input value={subhead} onChange={onAccentTitle} id="subhead" />
+      </div>
       <TextArea
         maxLength={180}
         onChange={onChange}

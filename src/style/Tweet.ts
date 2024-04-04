@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
+// form
+
 export const UserWrapper = styled.div`
   border: 1px solid green;
 
@@ -11,6 +13,13 @@ export const UserWrapper = styled.div`
 
     > div {
       position: relative;
+      display: flex;
+      flex-direction: column;
+
+      em {
+        font-size: 12px;
+        margin-bottom: 4px;
+      }
     }
 
     &:hover {
@@ -31,6 +40,10 @@ export const Avatar = styled.img`
   background-color: white;
   border-radius: 6px;
   border: 2px solid maroon;
+
+  &.no-img {
+    padding: 4px;
+  }
 `;
 export const Username = styled.span`
   font-size: 20px;
@@ -48,4 +61,8 @@ export const Username = styled.span`
     white-space: pre;
     border-bottom: 1px solid;
   }
+`;
+
+export const Title = styled.h2`
+  font-size: 9em;
 `;

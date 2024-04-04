@@ -83,7 +83,7 @@ export default function Profile() {
   const [avatar, setAvatar] = useState(user?.photoURL);
   const [tweets, setTweets] = useState<ITweet[]>([]);
   const [edit, setEdit] = useState(false);
-  const [editName, setEditName] = useState(user?.displayName ?? "");
+  const [editName, setEditName] = useState(user?.displayName || "");
 
   const onAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files[0];
@@ -106,16 +106,13 @@ export default function Profile() {
       orderBy("createdAt", "desc"),
       limit(25)
     );
+
     const snapshot = await getDocs(tweetQuery);
-    const tweets = snapshot.docs.map((doc) => {
-      const { tweet, createdAt, userId, username, photo, tweetTitle, avatar } =
-        doc.data();
-      return {
-        ...doc.data(),
-        id: doc.id,
-      };
-    });
-    setTweets(tweets);
+    const tweetsData = snapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    setTweets(tweetsData);
   };
   const onEdit = () => {
     setEdit(true);
