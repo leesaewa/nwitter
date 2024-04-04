@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 // form
@@ -142,7 +141,21 @@ export const Option = styled.div`
 
 // post
 export const ReportContainer = styled.article`
+  background-color: #f0f0f0;
+  break-inside: avoid;
+  /* aspect-ratio: 4 / 3; */
+  background: pink;
+  padding: 1rem;
+  border-radius: 0.75rem;
+
+  &::before {
+    counter-increment: grid;
+    content: counter(grid);
+  }
+
   &:first-of-type {
+    aspect-ratio: 1;
+    background: lavender;
     h2 {
       font-size: 7em;
     }
@@ -162,8 +175,6 @@ export const ReportHeadline = styled.div`
   position: relative;
 `;
 export const ReportFigure = styled.figure`
-  column-count: 1;
-
   > img {
     border-radius: 8px;
   }

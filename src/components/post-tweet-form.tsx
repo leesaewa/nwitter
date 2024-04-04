@@ -61,7 +61,22 @@ export default function PostTweetForm() {
     e.preventDefault();
     const user = auth.currentUser;
 
-    if (!user || isLoading || tweet === "" || tweet.length > 8000) return;
+    if (
+      !user ||
+      isLoading ||
+      tweet === "" ||
+      tweet.length > 8000 ||
+      tweet.length <= 400 ||
+      headline.length <= 20
+    ) {
+      if (headline.length <= 20) {
+        alert("Headline을 20자 이상으로 작성해주세요.");
+      }
+      if (tweet.length <= 400) {
+        alert("내용을 400자 이상 적어주세요");
+      }
+      return;
+    }
 
     try {
       setLoading(true);
@@ -80,6 +95,7 @@ export default function PostTweetForm() {
         const url = await getDownloadURL(result.ref);
         await updateDoc(doc, { photo: url });
       }
+
       setTweet("");
       setHeadline("");
       setSubhead("");

@@ -107,6 +107,12 @@ const GlobalStyles = createGlobalStyle`
   }
 
 
+  .test-layout{
+    columns: 25rem;
+    gap: 1rem;
+    counter-reset: grid;
+  }
+
 `;
 
 export const Section = styled.section``;
