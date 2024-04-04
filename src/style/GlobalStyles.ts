@@ -3,6 +3,33 @@ import reset from "styled-reset";
 
 const GlobalStyles = createGlobalStyle`
   ${reset};
+
+  /* scrollbar custom */
+  body::-webkit-scrollbar,
+  .scroll::-webkit-scrollbar {
+      width: 10px;
+  }
+
+  /* background of the scrollbar except button or resizer */
+  body::-webkit-scrollbar-track {
+      background-color: #fff;
+  }
+  .scroll::-webkit-scrollbar-track {
+    background-color: none;
+  }
+
+  /* scrollbar itself */
+  body::-webkit-scrollbar-thumb,
+  .scroll::-webkit-scrollbar-thumb {
+      background-color: maroon;
+      border-radius: 16px;
+      border: 2px solid #fff;
+  }
+  body::-webkit-scrollbar-button,
+  .scroll::-webkit-scrollbar-button {
+      display:none;
+  }
+
   * {
     box-sizing: border-box;
   }
@@ -35,6 +62,21 @@ const GlobalStyles = createGlobalStyle`
     &:focus {
       outline: 4px solid #80000060;
       border-color: #38040e;
+    }
+  }
+
+  textarea {
+    width: 100%;
+    height: 100px;
+    padding: 6px 8px;
+    margin-bottom: 20px;
+    color: white;
+    background-color: maroon;
+    border: 1px solid transparent;
+    resize: none;
+
+    &::placeholder {
+      color: #ddd;
     }
   }
 

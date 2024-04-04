@@ -73,21 +73,6 @@ export const TextareaWrap = styled.div`
   }
 `;
 
-export const TextArea = styled.textarea`
-  width: 100%;
-  height: 100px;
-  padding: 6px 8px;
-  margin-bottom: 20px;
-  color: white;
-  background-color: maroon;
-  border: 1px solid transparent;
-  resize: none;
-
-  &::placeholder {
-    color: #ddd;
-  }
-`;
-
 export const UserWrapper = styled.div`
   border: 1px solid green;
 
@@ -148,6 +133,58 @@ export const Username = styled.span`
   }
 `;
 
-export const Title = styled.h2`
-  font-size: 9em;
+export const Headline = styled.h2``;
+export const Subhead = styled.h3``;
+
+export const Option = styled.div`
+  position: relative;
 `;
+
+// post
+export const ReportContainer = styled.article`
+  &:first-of-type {
+    h2 {
+      font-size: 7em;
+    }
+    h3 {
+      font-size: 5em;
+    }
+
+    p {
+      em {
+        display: block;
+        font-size: 10em;
+      }
+    }
+  }
+`;
+export const ReportHeadline = styled.div`
+  position: relative;
+`;
+export const ReportFigure = styled.figure`
+  column-count: 1;
+
+  > img {
+    border-radius: 8px;
+  }
+
+  &.short {
+    background-color: red;
+    column-count: 1;
+
+    &.img {
+      column-count: 2;
+    }
+  }
+  &.middle {
+    background-color: blue;
+    column-count: 2;
+  }
+  &.long {
+    background-color: violet;
+    column-count: 3;
+  }
+`;
+export const ReportCaption = styled.figcaption``;
+
+export const ReportCont = styled.div``;

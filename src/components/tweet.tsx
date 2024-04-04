@@ -10,32 +10,24 @@ import {
 } from "firebase/storage";
 import React, { ChangeEvent, useState } from "react";
 import { Link } from "react-router-dom";
-import { Avatar, UserWrapper, Username, Title, InputBox } from "../style/Tweet";
+import {
+  Avatar,
+  UserWrapper,
+  Username,
+  InputBox,
+  Headline,
+  Subhead,
+  ReportContainer,
+  ReportCaption,
+  ReportFigure,
+  ReportHeadline,
+  FileThumbnail,
+  Option,
+  ReportCont,
+  TextareaWrap,
+} from "../style/Tweet";
 
-const Container = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 0.2fr;
-  margin-top: 30px;
-  column-gap: 20px;
-`;
-
-const Column = styled.div`
-  position: relative;
-`;
-
-const Payload = styled.p`
-  padding-top: 5px;
-`;
-
-const Photo = styled.img`
-  width: 100%;
-`;
-
-const Textarea = styled.textarea`
-  resize: none;
-  width: 100%;
-  height: 80%;
-`;
+const TextArea = styled.textarea``;
 
 const ButtonContainer = styled.div`
   position: absolute;
@@ -213,9 +205,11 @@ export default function Tweet({
     setThumbnail(null);
   };
 
+  const isEnglish = (str) => /[a-zA-Z]/.test(str);
+
   return (
-    <Container className="container">
-      <Column>
+    <ReportContainer className="container">
+      <ReportHeadline>
         {user?.uid === userId && edit ? (
           <>
             <InputBox>
@@ -230,78 +224,121 @@ export default function Tweet({
                 </>
               )}
             </InputBox>
-
-            <Textarea value={editedTweet} onChange={onChange} />
           </>
         ) : (
           <>
-            <Title>{headline}</Title>
-            <Title>{subhead}</Title>
-            <Payload>{tweet}</Payload>
+            <Headline className={isEnglish(headline) ? "eng" : ""}>
+              {headline}
+            </Headline>
+            <Subhead className={isEnglish(subhead) ? "eng" : ""}>
+              {subhead}
+            </Subhead>
           </>
         )}
-        {user?.uid === userId ? (
-          <ButtonContainer>
-            {edit ? (
-              <>
-                <EditBtn className="btn-save" onClick={onEditSave}>
-                  Save
-                </EditBtn>
-                <EditBtn className="btn-cancel" onClick={onEditCancel}>
-                  Cancel
-                </EditBtn>
-              </>
-            ) : (
-              <EditBtn onClick={onEdit}>Edit</EditBtn>
-            )}
-            <DeleteBtn onClick={onDelete}>Delete</DeleteBtn>
-          </ButtonContainer>
-        ) : null}
 
-        <UserWrapper>
-          <Link to={`/profile/${userId}`}>
-            <Avatar
-              src={avatar || "/logo.png"}
-              className={avatar ? "" : "no-img"}
+        <Option>
+          {user?.uid === userId ? (
+            <ButtonContainer>
+              {edit ? (
+                <>
+                  <EditBtn className="btn-save" onClick={onEditSave}>
+                    Save
+                  </EditBtn>
+                  <EditBtn className="btn-cancel" onClick={onEditCancel}>
+                    Cancel
+                  </EditBtn>
+                </>
+              ) : (
+                <EditBtn onClick={onEdit}>Edit</EditBtn>
+              )}
+              <DeleteBtn onClick={onDelete}>Delete</DeleteBtn>
+            </ButtonContainer>
+          ) : null}
+
+          <UserWrapper>
+            <Link to={`/profile/${userId}`}>
+              <Avatar
+                src={avatar || "/logo.png"}
+                className={avatar ? "" : "no-img"}
+              />
+              <div>
+                <em className="eng">reporter</em>
+                <p>
+                  <Username>{username}</Username>
+                  <Username className="hover">{username}</Username>
+                </p>
+              </div>
+            </Link>
+          </UserWrapper>
+        </Option>
+      </ReportHeadline>
+
+      {/* tweet.length가 800 이하인 경우: short 클래스 추가
+      tweet.length가 1999 이하인 경우: middle 클래스 추가
+      tweet.length가 2000 이상인 경우: long 클래스 추가 */}
+      <ReportFigure
+        className={`${
+          tweet.length <= 800
+            ? "short "
+            : tweet.length <= 1999
+            ? "middle"
+            : tweet.length >= 2000
+            ? "long"
+            : ""
+        } ${photo ? "img" : ""}`}
+      >
+        {photo && user?.uid === userId && edit && (
+          <>
+            <FileBtn htmlFor="editThumbnail" className="file-upload">
+              {thumbnail ? (
+                <FileThumbnail src={thumbnail} />
+              ) : (
+                <FileThumbnail src={photo} />
+              )}
+            </FileBtn>
+            <FileInput
+              onChange={onEditPhoto}
+              type="file"
+              id="editThumbnail"
+              accept="image/*"
             />
-            <div>
-              <em className="eng">reporter</em>
-              <p>
-                <Username>{username}</Username>
-                <Username className="hover">{username}</Username>
-              </p>
-            </div>
-          </Link>
-        </UserWrapper>
-      </Column>
-
-      {/* 이미지가 존재하고, 현재 사용자의 id가 트윗을 작성한 사용자의 ID와 동일하며, 수정 버튼을 클릭했을 때 표시 */}
-      {photo && user?.uid === userId && edit && (
-        <Column>
-          <FileBtn htmlFor="editThumbnail" className="file-upload">
-            {thumbnail ? (
-              <Photo src={thumbnail} />
-            ) : (
-              <Photo src={photo}></Photo>
+            {thumbnail && (
+              <DeleteBtn type="button" onClick={onDeletePhoto}>
+                X
+              </DeleteBtn>
             )}
-          </FileBtn>
-          <FileInput
-            onChange={onEditPhoto}
-            type="file"
-            id="editThumbnail"
-            accept="image/*"
-          />
-          {thumbnail && (
-            <DeleteBtn type="button" onClick={onDeletePhoto}>
-              X
-            </DeleteBtn>
+          </>
+        )}
+
+        {(!photo || !(user?.uid === userId && edit)) && (
+          <>{photo && <FileThumbnail src={photo} />}</>
+        )}
+
+        <ReportCaption>
+          {user?.uid === userId && edit ? (
+            <TextareaWrap>
+              <TextArea
+                className="scroll"
+                maxLength={8000}
+                value={editedTweet}
+                onChange={onChange}
+              />
+              <em>{tweet.length}/8000</em>
+            </TextareaWrap>
+          ) : (
+            <ReportCont>
+              {tweet.length > 0 && (
+                <>
+                  <em className={`first ${isEnglish ? "eng" : ""}`}>
+                    {tweet.charAt(0)}
+                  </em>
+                  {tweet.slice(1)}
+                </>
+              )}
+            </ReportCont>
           )}
-        </Column>
-      )}
-      {/* 트윗을 작성한 사용자가 아니거나 수정 버튼을 클릭하지 않았을 때 트윗의 사진을 보여줌 */}
-      {(!photo || !(user?.uid === userId && edit)) && (
-        <Column>{photo && <Photo src={photo}></Photo>}</Column>
-      )}
-    </Container>
+        </ReportCaption>
+      </ReportFigure>
+    </ReportContainer>
   );
 }

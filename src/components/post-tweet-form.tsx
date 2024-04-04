@@ -5,7 +5,6 @@ import { auth, db, storage } from "../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {
   Form,
-  TextArea,
   TextareaWrap,
   InputBox,
   PostWrapper,
@@ -15,6 +14,8 @@ import {
   FileThumbnail,
 } from "../style/Tweet";
 import { SubmitBtn, DeleteBtn } from "../style/Button";
+
+const TextArea = styled.textarea``;
 
 export default function PostTweetForm() {
   const [isLoading, setLoading] = useState(false);
@@ -113,6 +114,7 @@ export default function PostTweetForm() {
       <PostWrapper>
         <TextareaWrap>
           <TextArea
+            className="scroll"
             maxLength={8000}
             onChange={onChange}
             value={tweet}
