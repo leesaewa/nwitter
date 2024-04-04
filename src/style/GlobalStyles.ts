@@ -108,9 +108,11 @@ const GlobalStyles = createGlobalStyle`
 
 
   .test-layout{
-    columns: 25rem;
+    /* columns: 25rem;
     gap: 1rem;
-    counter-reset: grid;
+    counter-reset: grid; */display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
   }
 
 `;

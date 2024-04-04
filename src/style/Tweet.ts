@@ -141,12 +141,17 @@ export const Option = styled.div`
 
 // post
 export const ReportContainer = styled.article`
-  background-color: #f0f0f0;
-  break-inside: avoid;
+  /* break-inside: avoid; */
   /* aspect-ratio: 4 / 3; */
+  /* background: pink;
+  padding: 1rem;
+  border-radius: 0.75rem; */
+  flex: 0 0 calc((100% - 2rem) / 3); /* 간격을 고려한 너비 */
+  aspect-ratio: 4 / 3;
   background: pink;
   padding: 1rem;
   border-radius: 0.75rem;
+  break-inside: avoid;
 
   &::before {
     counter-increment: grid;
@@ -154,8 +159,9 @@ export const ReportContainer = styled.article`
   }
 
   &:first-of-type {
-    aspect-ratio: 1;
+    /* aspect-ratio: 1; */
     background: lavender;
+    flex-basis: calc(100% - 1rem); /* 전체 너비에서 간격을 제외한 값 */
     h2 {
       font-size: 7em;
     }
