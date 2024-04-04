@@ -28,6 +28,42 @@ const GlobalStyles = createGlobalStyle`
     color:maroon
   }
 
+  input, textarea {
+    font-family: "Hahmlet", serif;
+    border-radius: 6px;
+
+    &:focus {
+      outline: 4px solid #80000060;
+      border-color: #38040e;
+    }
+  }
+
+  button, input[type="submit"], .file-upload {
+    transition: all 0.5s ease-in-out;
+  }
+
+  .file-upload {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 120px;
+    color: maroon;
+    font-size: 18px;
+    border: 1.5px solid maroon;
+    border-radius: 6px;
+    overflow: hidden;
+
+    &:hover {
+      background-color: #ffd020;
+    }
+  }
+
+  button {
+
+  }
+
 
 `;
 

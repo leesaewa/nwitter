@@ -3,92 +3,18 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { auth, db, storage } from "../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const TextArea = styled.textarea`
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: maroon;
-  border: 1px solid black;
-  border-radius: 6px;
-  resize: none;
-  color: aliceblue;
-  height: 100px;
-  margin-bottom: 20px;
-  padding: 6px 8px;
-
-  &::placeholder {
-    font-size: 16px;
-    color: aliceblue;
-  }
-  &:focus {
-    outline: 2px solid #f0f8ff88;
-    border-color: aliceblue;
-  }
-`;
-
-const Label = styled.label``;
-
-const ButtonWrapper = styled.div`
-  display: flex;
-  column-gap: 20px;
-`;
-
-const AttackFileButton = styled.label`
-  cursor: pointer;
-  display: block;
-  width: 100%;
-  height: 100%;
-  color: maroon;
-  text-align: center;
-`;
-
-const PhotoInner = styled.div`
-  cursor: pointer;
-  position: relative;
-  width: 40%;
-  background-color: aliceblue;
-  border-radius: 6px;
-`;
-
-const Photo = styled.img`
-  width: 100%;
-`;
-
-const DeleteBtn = styled.button`
-  cursor: pointer;
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  border: 0;
-  background-color: maroon;
-  color: white;
-  border-radius: 4px;
-`;
-
-const AttackFileInput = styled.input`
-  display: none;
-`;
-
-const SubmitBtn = styled.input`
-  cursor: pointer;
-  width: 100%;
-  background-color: black;
-  border: 1px solid aliceblue;
-  border-radius: 6px;
-  color: aliceblue;
-  padding: 6px 0;
-  transition: all 0.2s ease-in-out;
-  &:hover {
-    background-color: aliceblue;
-    border-color: black;
-    color: black;
-  }
-`;
+import {
+  Form,
+  TextArea,
+  TextareaWrap,
+  InputBox,
+  PostWrapper,
+  UploadWrap,
+  UploadInner,
+  FileInput,
+  FileThumbnail,
+} from "../style/Tweet";
+import { SubmitBtn, DeleteBtn } from "../style/Button";
 
 export default function PostTweetForm() {
   const [isLoading, setLoading] = useState(false);
@@ -134,7 +60,7 @@ export default function PostTweetForm() {
     e.preventDefault();
     const user = auth.currentUser;
 
-    if (!user || isLoading || tweet === "" || tweet.length > 180) return;
+    if (!user || isLoading || tweet === "" || tweet.length > 8000) return;
 
     try {
       setLoading(true);
@@ -171,49 +97,51 @@ export default function PostTweetForm() {
 
   return (
     <Form onSubmit={onSubmit}>
-      <div>
-        <Label htmlFor="headline">헤드라인</Label>
+      <InputBox>
+        <label htmlFor="headline">Headline</label>
         <input
           value={headline}
           onChange={onFirstTitle}
           id="headline"
           required
         />
-      </div>
-      <div>
-        <Label htmlFor="subhead">서브헤드</Label>
+      </InputBox>
+      <InputBox>
+        <label htmlFor="subhead">Subhead</label>
         <input value={subhead} onChange={onAccentTitle} id="subhead" />
-      </div>
-      <TextArea
-        maxLength={180}
-        onChange={onChange}
-        value={tweet}
-        placeholder="What is happening?"
-        required
-      />
-      <ButtonWrapper>
-        <PhotoInner>
-          <AttackFileButton htmlFor="addPhoto">
-            {file ? <Photo src={thumbnail} /> : "첨부"}
-          </AttackFileButton>
-          <AttackFileInput
-            onChange={onFileChange}
-            type="file"
-            id="addPhoto"
-            accept="image/*"
+      </InputBox>
+      <PostWrapper>
+        <TextareaWrap>
+          <TextArea
+            maxLength={8000}
+            onChange={onChange}
+            value={tweet}
+            placeholder="What is happening?"
+            required
           />
-          {file && (
-            <DeleteBtn type="button" onClick={onDeletePhoto}>
-              X
-            </DeleteBtn>
-          )}
-        </PhotoInner>
+          <em>{tweet.length}/8000</em>
+        </TextareaWrap>
+        <UploadWrap>
+          <UploadInner>
+            <label htmlFor="addPhoto" className="file-upload">
+              {file ? <FileThumbnail src={thumbnail} /> : "이미지 첨부"}
+            </label>
+            <FileInput
+              onChange={onFileChange}
+              type="file"
+              id="addPhoto"
+              accept="image/*"
+            />
+            {file && (
+              <DeleteBtn type="button" onClick={onDeletePhoto}>
+                X
+              </DeleteBtn>
+            )}
+          </UploadInner>
+        </UploadWrap>
 
-        <SubmitBtn
-          type="submit"
-          value={isLoading ? "Posting..." : "Post Tweet"}
-        />
-      </ButtonWrapper>
+        <SubmitBtn type="submit" value={isLoading ? "Posting..." : "Submit!"} />
+      </PostWrapper>
     </Form>
   );
 }

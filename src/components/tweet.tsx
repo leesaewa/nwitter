@@ -10,7 +10,7 @@ import {
 } from "firebase/storage";
 import React, { ChangeEvent, useState } from "react";
 import { Link } from "react-router-dom";
-import { Avatar, UserWrapper, Username, Title } from "../style/Tweet";
+import { Avatar, UserWrapper, Username, Title, InputBox } from "../style/Tweet";
 
 const Container = styled.div`
   display: grid;
@@ -36,8 +36,6 @@ const Textarea = styled.textarea`
   width: 100%;
   height: 80%;
 `;
-
-const Input = styled.input``;
 
 const ButtonContainer = styled.div`
   position: absolute;
@@ -125,7 +123,7 @@ export default function Tweet({
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditedHeadline(e.target.value);
   };
-  const onsubheadChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onSubheadChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditedSubhead(e.target.value);
   };
 
@@ -220,12 +218,18 @@ export default function Tweet({
       <Column>
         {user?.uid === userId && edit ? (
           <>
-            <div>
-              <Input value={editedHeadline} onChange={onTitleChange} />
+            <InputBox>
+              <label htmlFor="headline">Headline</label>
+              <input value={editedHeadline} onChange={onTitleChange} />
+            </InputBox>
+            <InputBox>
               {editedSubhead && (
-                <Input value={editedSubhead} onChange={onsubheadChange} />
+                <>
+                  <label htmlFor="subhead">Subhead</label>
+                  <input value={editedSubhead} onChange={onSubheadChange} />
+                </>
               )}
-            </div>
+            </InputBox>
 
             <Textarea value={editedTweet} onChange={onChange} />
           </>
@@ -274,7 +278,7 @@ export default function Tweet({
       {/* 이미지가 존재하고, 현재 사용자의 id가 트윗을 작성한 사용자의 ID와 동일하며, 수정 버튼을 클릭했을 때 표시 */}
       {photo && user?.uid === userId && edit && (
         <Column>
-          <FileBtn htmlFor="editThumbnail">
+          <FileBtn htmlFor="editThumbnail" className="file-upload">
             {thumbnail ? (
               <Photo src={thumbnail} />
             ) : (
