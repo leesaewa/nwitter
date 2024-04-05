@@ -224,7 +224,7 @@ export default function Tweet({
     >
       <ReportHeadline>
         {user?.uid === userId && edit ? (
-          <>
+          <div>
             <InputBox>
               <label htmlFor="headline">Headline</label>
               <input value={editedHeadline} onChange={onTitleChange} />
@@ -237,16 +237,18 @@ export default function Tweet({
                 </>
               )}
             </InputBox>
-          </>
+          </div>
         ) : (
-          <>
+          <div>
             <Headline className={isEnglish(headline) ? "eng" : ""}>
               {headline}
             </Headline>
-            <Subhead className={isEnglish(subhead) ? "eng" : ""}>
-              {subhead}
-            </Subhead>
-          </>
+            {subhead && (
+              <Subhead className={isEnglish(subhead) ? "eng" : ""}>
+                {subhead}
+              </Subhead>
+            )}
+          </div>
         )}
 
         <Option>

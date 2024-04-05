@@ -5,10 +5,10 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
   padding: 1rem;
   border-radius: 8px;
-  border: 1px solid #ddd;
+  border: 1.5px solid maroon;
 `;
 
 export const InputBox = styled.div`
@@ -132,9 +132,16 @@ export const Username = styled.span`
 
 export const Headline = styled.h2`
   color: maroon;
+  font-size: 4em;
+  line-height: 5rem;
 `;
 export const Subhead = styled.h3`
-  color: maroon;
+  color: #4c0202;
+  font-size: 3em;
+  border-top: 1px solid maroon;
+  padding-top: 1rem;
+  margin-top: 1rem;
+  line-height: 4rem;
 `;
 
 export const Option = styled.div`
@@ -142,8 +149,7 @@ export const Option = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 3rem 0;
-  padding: 1rem 0;
+  padding: 1rem;
   border-top: 1.5px solid maroon;
   border-bottom: 1.5px solid maroon;
 `;
@@ -158,7 +164,7 @@ export const ReportContainer = styled.article`
   /* flex: 0 0 calc((100% - 2rem) / 3);
   aspect-ratio: 4 / 3; */
   /* background: pink; */
-  padding: 1rem;
+
   border-radius: 0.75rem;
   /* break-inside: avoid; */
   border: 1.5px solid maroon;
@@ -176,20 +182,22 @@ export const ReportContainer = styled.article`
     grid-column: 1/-1;
 
     figure {
-      column-count: 2;
+      column-count: 3;
 
       figcaption {
-        .first {
+        /* .first {
           font-size: 5em;
-        }
+        } */
       }
     }
 
     h2 {
       font-size: 7em;
+      line-height: 7rem;
     }
     h3 {
       font-size: 5em;
+      line-height: 6rem;
     }
 
     p {
@@ -217,19 +225,17 @@ export const ReportContainer = styled.article`
     /* background-color: violet; */
     grid-column: 1/-1;
     column-count: 2;
-
-    h2 {
-      font-size: 4em;
-    }
-    h3 {
-      font-size: 2em;
-    }
   }
 `;
 export const ReportHeadline = styled.div`
   position: relative;
+
+  > div {
+    padding: 1.4rem;
+  }
 `;
 export const ReportFigure = styled.figure`
+  padding: 1rem;
   > img {
     border-radius: 8px;
   }
@@ -239,4 +245,23 @@ export const ReportCaption = styled.figcaption``;
 export const ReportCont = styled.div`
   line-height: 1.4rem;
   color: maroon;
+
+  &:first-child {
+    &:first-letter {
+      font-size: 72px;
+      float: left;
+      padding: 10px 2rem 10px 0;
+      /* height: 64px; */
+      /* background-color: maroon; */
+      margin-right: 10px;
+      color: #ffd020;
+      text-shadow: 2px 2px 0 maroon;
+      line-height: 70px;
+      text-transform: uppercase;
+    }
+    &:first-line {
+      font-weight: bold;
+      font-size: 24px;
+    }
+  }
 `;

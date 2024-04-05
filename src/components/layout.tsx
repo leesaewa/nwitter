@@ -3,13 +3,15 @@ import styled from "styled-components";
 import Ad from "./common/Ad";
 import Navigation from "./common/Navigation";
 
-const Main = styled.main``;
+const Main = styled.div`
+  margin: 0 auto;
+`;
 
 const Footer = styled.footer``;
 
 export default function Layout() {
   return (
-    <Main>
+    <Main className="root_container">
       <Navigation />
 
       <Outlet />

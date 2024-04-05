@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { HiChevronRight, HiChevronLeft } from "react-icons/hi2";
 
 const Container = styled.aside``;
 
-const SlideWrapper = styled.div`
+const Custom = styled.div`
+  padding: 1rem;
+  border-radius: 0.75rem;
+  border: 1.5px solid maroon;
+`;
+
+const SlideWrapper = styled(Custom)``;
+
+const SlideInner = styled.div`
   position: relative;
   width: 100%;
   border-radius: 6px;
   overflow: hidden;
-  margin-bottom: 2rem;
 
   &:hover {
     button {
@@ -64,7 +72,8 @@ const Title = styled.h2`
   }
 `;
 
-const RankingWrapper = styled.div`
+const RankingWrapper = styled(Custom)`
+  margin-top: 2rem;
   h2 {
     em {
       font-size: 2.7rem;
@@ -146,19 +155,25 @@ const Left = () => {
 
   return (
     <Container className="container">
-      <Title className="eng">
-        Have you seen this <em>WIZARD?</em>
-      </Title>
       <SlideWrapper>
-        <Slide style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
-          {slides.map((slide, index) => (
-            <SlideItem key={index}>
-              <SlideImg src={slide} alt={`Slide ${index}`} />
-            </SlideItem>
-          ))}
-        </Slide>
-        <PrevBtn onClick={prevSlide}>이전</PrevBtn>
-        <NextBtn onClick={nextSlide}>다음</NextBtn>
+        <Title className="eng">
+          Have you seen this <em>WIZARD?</em>
+        </Title>
+        <SlideInner>
+          <Slide style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
+            {slides.map((slide, index) => (
+              <SlideItem key={index}>
+                <SlideImg src={slide} alt={`Slide ${index}`} />
+              </SlideItem>
+            ))}
+          </Slide>
+          <PrevBtn onClick={prevSlide}>
+            <HiChevronLeft />
+          </PrevBtn>
+          <NextBtn onClick={nextSlide}>
+            <HiChevronRight />
+          </NextBtn>
+        </SlideInner>
       </SlideWrapper>
 
       <RankingWrapper>

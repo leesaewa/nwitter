@@ -63,7 +63,7 @@ function App() {
   }, []);
 
   return (
-    <Container className="container">
+    <Container>
       <GlobalStyles />
       {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
     </Container>

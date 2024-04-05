@@ -40,7 +40,9 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .container{
-    border:1px solid red
+    /* border:1px solid red */
+
+
   }
   .eng {
     font-family: "Cinzel Decorative", cursive;
@@ -49,6 +51,8 @@ const GlobalStyles = createGlobalStyle`
   a {
     color: maroon;
     text-decoration: none;
+    display: block;
+    transition: all 0.5s ease-in-out;
 
   }
   a:hover {
