@@ -30,9 +30,7 @@ import {
 const TextArea = styled.textarea``;
 
 const ButtonContainer = styled.div`
-  position: absolute;
-  right: 0;
-  top: 0;
+  border: 1px solid red;
 `;
 
 const Button = styled.button`
@@ -252,6 +250,22 @@ export default function Tweet({
         )}
 
         <Option>
+          <UserWrapper>
+            <Link to={`/profile/${userId}`}>
+              <Avatar
+                src={avatar || "/logo.png"}
+                className={avatar ? "" : "no-img"}
+              />
+              <div>
+                <em className="eng">reporter</em>
+                <p>
+                  <Username>{username}</Username>
+                  <Username className="hover">{username}</Username>
+                </p>
+              </div>
+            </Link>
+          </UserWrapper>
+
           {user?.uid === userId ? (
             <ButtonContainer>
               {edit ? (
@@ -269,22 +283,6 @@ export default function Tweet({
               <DeleteBtn onClick={onDelete}>Delete</DeleteBtn>
             </ButtonContainer>
           ) : null}
-
-          <UserWrapper>
-            <Link to={`/profile/${userId}`}>
-              <Avatar
-                src={avatar || "/logo.png"}
-                className={avatar ? "" : "no-img"}
-              />
-              <div>
-                <em className="eng">reporter</em>
-                <p>
-                  <Username>{username}</Username>
-                  <Username className="hover">{username}</Username>
-                </p>
-              </div>
-            </Link>
-          </UserWrapper>
         </Option>
       </ReportHeadline>
 

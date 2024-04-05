@@ -73,8 +73,6 @@ export const TextareaWrap = styled.div`
 `;
 
 export const UserWrapper = styled.div`
-  border: 1px solid green;
-
   a {
     display: inline-flex;
     align-items: center;
@@ -132,11 +130,22 @@ export const Username = styled.span`
   }
 `;
 
-export const Headline = styled.h2``;
-export const Subhead = styled.h3``;
+export const Headline = styled.h2`
+  color: maroon;
+`;
+export const Subhead = styled.h3`
+  color: maroon;
+`;
 
 export const Option = styled.div`
   position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 3rem 0;
+  padding: 1rem 0;
+  border-top: 1.5px solid maroon;
+  border-bottom: 1.5px solid maroon;
 `;
 
 // post
@@ -148,10 +157,11 @@ export const ReportContainer = styled.article`
   border-radius: 0.75rem; */
   /* flex: 0 0 calc((100% - 2rem) / 3);
   aspect-ratio: 4 / 3; */
-  background: pink;
+  /* background: pink; */
   padding: 1rem;
   border-radius: 0.75rem;
-  break-inside: avoid;
+  /* break-inside: avoid; */
+  border: 1.5px solid maroon;
 
   /* &::before {
     counter-increment: grid;
@@ -160,11 +170,20 @@ export const ReportContainer = styled.article`
 
   &:first-of-type {
     /* aspect-ratio: 1; */
-    background: lavender;
     /* flex-basis: calc(100% - 1rem);  */
     /* margin: 0 0 1em; 
     break-inside: avoid; */
     grid-column: 1/-1;
+
+    figure {
+      column-count: 2;
+
+      figcaption {
+        .first {
+          font-size: 5em;
+        }
+      }
+    }
 
     h2 {
       font-size: 7em;
@@ -182,7 +201,7 @@ export const ReportContainer = styled.article`
   }
 
   &.short {
-    background-color: red;
+    /* background-color: red; */
     /* column-count: 1; */
 
     &.img {
@@ -191,13 +210,20 @@ export const ReportContainer = styled.article`
     }
   }
   &.middle {
-    background-color: blue;
+    /* background-color: blue; */
     /* column-count: 2; */
   }
   &.long {
-    background-color: violet;
+    /* background-color: violet; */
     grid-column: 1/-1;
-    column-count: 3;
+    column-count: 2;
+
+    h2 {
+      font-size: 4em;
+    }
+    h3 {
+      font-size: 2em;
+    }
   }
 `;
 export const ReportHeadline = styled.div`
@@ -210,4 +236,7 @@ export const ReportFigure = styled.figure`
 `;
 export const ReportCaption = styled.figcaption``;
 
-export const ReportCont = styled.div``;
+export const ReportCont = styled.div`
+  line-height: 1.4rem;
+  color: maroon;
+`;
