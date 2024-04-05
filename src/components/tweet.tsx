@@ -207,8 +207,23 @@ export default function Tweet({
 
   const isEnglish = (str) => /[a-zA-Z]/.test(str);
 
+  {
+    /* tweet.length가 800 이하인 경우: short 클래스 추가
+      tweet.length가 1999 이하인 경우: middle 클래스 추가
+      tweet.length가 2000 이상인 경우: long 클래스 추가 */
+  }
   return (
-    <ReportContainer className="container">
+    <ReportContainer
+      className={`${
+        tweet.length <= 800
+          ? "short"
+          : tweet.length <= 1999
+          ? "middle"
+          : tweet.length >= 2000
+          ? "long"
+          : ""
+      } ${photo ? "img" : ""}`}
+    >
       <ReportHeadline>
         {user?.uid === userId && edit ? (
           <>
@@ -273,20 +288,7 @@ export default function Tweet({
         </Option>
       </ReportHeadline>
 
-      {/* tweet.length가 800 이하인 경우: short 클래스 추가
-      tweet.length가 1999 이하인 경우: middle 클래스 추가
-      tweet.length가 2000 이상인 경우: long 클래스 추가 */}
-      <ReportFigure
-        className={`${
-          tweet.length <= 800
-            ? "short "
-            : tweet.length <= 1999
-            ? "middle"
-            : tweet.length >= 2000
-            ? "long"
-            : ""
-        } ${photo ? "img" : ""}`}
-      >
+      <ReportFigure>
         {photo && user?.uid === userId && edit && (
           <>
             <FileBtn htmlFor="editThumbnail" className="file-upload">
@@ -329,7 +331,7 @@ export default function Tweet({
             <ReportCont>
               {tweet.length > 0 && (
                 <>
-                  <em className={`first ${isEnglish ? "eng" : ""}`}>
+                  <em className={`first ${isEnglish(tweet) ? "eng" : ""}`}>
                     {tweet.charAt(0)}
                   </em>
                   {tweet.slice(1)}

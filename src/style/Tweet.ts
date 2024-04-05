@@ -146,22 +146,26 @@ export const ReportContainer = styled.article`
   /* background: pink;
   padding: 1rem;
   border-radius: 0.75rem; */
-  flex: 0 0 calc((100% - 2rem) / 3); /* 간격을 고려한 너비 */
-  aspect-ratio: 4 / 3;
+  /* flex: 0 0 calc((100% - 2rem) / 3);
+  aspect-ratio: 4 / 3; */
   background: pink;
   padding: 1rem;
   border-radius: 0.75rem;
   break-inside: avoid;
 
-  &::before {
+  /* &::before {
     counter-increment: grid;
     content: counter(grid);
-  }
+  } */
 
   &:first-of-type {
     /* aspect-ratio: 1; */
     background: lavender;
-    flex-basis: calc(100% - 1rem); /* 전체 너비에서 간격을 제외한 값 */
+    /* flex-basis: calc(100% - 1rem);  */
+    /* margin: 0 0 1em; 
+    break-inside: avoid; */
+    grid-column: 1/-1;
+
     h2 {
       font-size: 7em;
     }
@@ -176,6 +180,25 @@ export const ReportContainer = styled.article`
       }
     }
   }
+
+  &.short {
+    background-color: red;
+    /* column-count: 1; */
+
+    &.img {
+      /* column-count: 2; */
+      grid-column: span 2;
+    }
+  }
+  &.middle {
+    background-color: blue;
+    /* column-count: 2; */
+  }
+  &.long {
+    background-color: violet;
+    grid-column: 1/-1;
+    column-count: 3;
+  }
 `;
 export const ReportHeadline = styled.div`
   position: relative;
@@ -183,23 +206,6 @@ export const ReportHeadline = styled.div`
 export const ReportFigure = styled.figure`
   > img {
     border-radius: 8px;
-  }
-
-  &.short {
-    background-color: red;
-    column-count: 1;
-
-    &.img {
-      column-count: 2;
-    }
-  }
-  &.middle {
-    background-color: blue;
-    column-count: 2;
-  }
-  &.long {
-    background-color: violet;
-    column-count: 3;
   }
 `;
 export const ReportCaption = styled.figcaption``;

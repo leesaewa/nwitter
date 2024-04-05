@@ -108,15 +108,27 @@ const GlobalStyles = createGlobalStyle`
 
 
   .test-layout{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16%,1fr));
+    gap:1rem;
+    margin-top: 1rem;
     /* columns: 25rem;
     gap: 1rem;
-    counter-reset: grid; */display: flex;
+    counter-reset: grid; */
+    /* display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1rem; */
+  
+    /* column-count: 3; 
+    column-width: 200px;
+    column-gap: 1em; */
+
   }
 
 `;
 
-export const Section = styled.section``;
+export const Section = styled.section`
+  width: 100%;
+`;
 
 export default GlobalStyles;
