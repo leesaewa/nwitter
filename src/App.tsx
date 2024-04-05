@@ -11,6 +11,7 @@ import ProtectedRoute from "./components/protected-route";
 import Channel from "./routes/Channel";
 import GlobalStyles from "./style/GlobalStyles";
 import styled from "styled-components";
+import { ModalProvider } from "./components/common/Modal";
 
 const router = createBrowserRouter([
   {
@@ -63,10 +64,12 @@ function App() {
   }, []);
 
   return (
-    <Container>
-      <GlobalStyles />
-      {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
-    </Container>
+    <ModalProvider>
+      <Container>
+        <GlobalStyles />
+        {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
+      </Container>
+    </ModalProvider>
   );
 }
 

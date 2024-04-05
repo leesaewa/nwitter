@@ -106,10 +106,6 @@ const GlobalStyles = createGlobalStyle`
     }
   }
 
-  button {
-
-  }
-
 
   .test-layout{
     display: grid;
@@ -133,6 +129,11 @@ const GlobalStyles = createGlobalStyle`
 
 export const Section = styled.section`
   width: 100%;
+`;
+
+export const Button = styled.button`
+  cursor: pointer;
+  border: 0;
 `;
 
 export default GlobalStyles;
