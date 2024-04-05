@@ -30,7 +30,7 @@ import {
 const TextArea = styled.textarea``;
 
 const ButtonContainer = styled.div`
-  border: 1px solid red;
+  /* border: 1px solid red; */
 `;
 
 const Button = styled.button`
@@ -257,7 +257,7 @@ export default function Tweet({
                 className={avatar ? "" : "no-img"}
               />
               <div>
-                <em className="eng">reporter</em>
+                <em className="eng">Journalist</em>
                 <p>
                   <Username>{username}</Username>
                   <Username className="hover">{username}</Username>
