@@ -195,17 +195,15 @@ export const ReportContainer = styled.article`
   }
 
   &.short {
-    /* background-color: red; */
-    /* column-count: 1; */
+    column-span: all;
 
-    &.img {
-      /* column-count: 2; */
-      grid-column: span 2;
+    figure {
+      column-count: 2;
     }
   }
   &.middle {
-    /* background-color: blue; */
-    /* column-count: 2; */
+    column-count: 2;
+    column-span: all;
   }
   &.long {
     column-span: all;
@@ -233,6 +231,7 @@ export const ReportCaption = styled.figcaption``;
 export const ReportCont = styled.div`
   line-height: 1.4rem;
   color: maroon;
+  word-break: break-word;
 
   &:first-child {
     &:first-letter {

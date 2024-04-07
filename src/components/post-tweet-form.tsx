@@ -14,16 +14,18 @@ import {
   FileThumbnail,
 } from "../style/Tweet";
 import { SubmitBtn, DeleteBtn } from "../style/Button";
+import { useModal } from "./common/Modal";
 
 const TextArea = styled.textarea``;
 
-export default function PostTweetForm() {
+export default function PostTweetForm({ onCloseModal }) {
   const [isLoading, setLoading] = useState(false);
   const [tweet, setTweet] = useState("");
   const [headline, setHeadline] = useState("");
   const [subhead, setSubhead] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [thumbnail, setThumbnail] = useState<string | null>(null);
+  const { openModal } = useModal();
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTweet(e.target.value);
@@ -51,7 +53,12 @@ export default function PostTweetForm() {
         };
         thumbnail.readAsDataURL(file);
       } else {
-        alert("파일 크기가 너무 큽니다. 2MB 이하의 파일을 선택해주세요.");
+        openModal(
+          <>
+            <span>파일 크기가 너무 큽니다. </span>2MB 이하의 파일을
+            선택해주세요.
+          </>
+        );
       }
     } else {
       return;
@@ -66,15 +73,27 @@ export default function PostTweetForm() {
       isLoading ||
       tweet === "" ||
       tweet.length > 8000 ||
-      tweet.length <= 400 ||
-      headline.length <= 20
+      tweet.length < 400 ||
+      headline.length < 20 ||
+      !file
     ) {
-      if (headline.length <= 20) {
-        alert("Headline을 20자 이상으로 작성해주세요.");
+      let errorMessage = "";
+
+      if (!user) {
+        errorMessage = "로그인이 필요합니다.";
+      } else if (tweet === "" && headline === "") {
+        errorMessage = "Headline과 기사 내용을 입력해주세요";
+      } else if (tweet.length > 8000) {
+        errorMessage = "기사 내용을 8000자 이내로 작성해주세요.";
+      } else if (tweet.length < 400) {
+        errorMessage = "기사 내용을 최소 400자 이상으로 작성해주세요.";
+      } else if (headline.length < 20) {
+        errorMessage = "Headline은 20자 이상으로 작성해주세요.";
+      } else if (!file) {
+        errorMessage = "기사 이미지를 첨부해주세요";
       }
-      if (tweet.length <= 400) {
-        alert("내용을 400자 이상 적어주세요");
-      }
+
+      openModal(errorMessage);
       return;
     }
 
@@ -106,6 +125,8 @@ export default function PostTweetForm() {
     } finally {
       setLoading(false);
     }
+
+    onCloseModal();
   };
   const onDeletePhoto = (e: React.MouseEvent<HTMLButtonElement>) => {
     setFile(null);
@@ -116,12 +137,7 @@ export default function PostTweetForm() {
     <Form onSubmit={onSubmit}>
       <InputBox>
         <label htmlFor="headline">Headline</label>
-        <input
-          value={headline}
-          onChange={onFirstTitle}
-          id="headline"
-          required
-        />
+        <input value={headline} onChange={onFirstTitle} id="headline" />
       </InputBox>
       <InputBox>
         <label htmlFor="subhead">Subhead</label>
@@ -135,7 +151,6 @@ export default function PostTweetForm() {
             onChange={onChange}
             value={tweet}
             placeholder="What is happening?"
-            required
           />
           <em>{tweet.length}/8000</em>
         </TextareaWrap>
