@@ -20,6 +20,7 @@ export const SubmitBtn = styled.input`
   color: maroon;
   font-size: 18px;
   padding: 6px 0;
+  margin-top: 1rem;
   transition: all 0.2s ease-in-out;
   &:hover {
     background-color: black;

@@ -108,10 +108,11 @@ const GlobalStyles = createGlobalStyle`
 
 
   .test-layout{
-    display: grid;
+    columns: 20vw;
+    /* display: grid;
     grid-template-columns: repeat(auto-fit, minmax(16%,1fr));
     gap:1rem;
-    margin-top: 1rem;
+    margin-top: 1rem; */
     /* columns: 25rem;
     gap: 1rem;
     counter-reset: grid; */

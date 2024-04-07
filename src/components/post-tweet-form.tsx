@@ -157,9 +157,8 @@ export default function PostTweetForm() {
             )}
           </UploadInner>
         </UploadWrap>
-
-        <SubmitBtn type="submit" value={isLoading ? "Posting..." : "Submit!"} />
       </PostWrapper>
+      <SubmitBtn type="submit" value={isLoading ? "Posting..." : "Submit!"} />
     </Form>
   );
 }

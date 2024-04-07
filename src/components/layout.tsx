@@ -26,18 +26,52 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalContent = styled.div`
-  width: 500px;
-  height: 500px;
-  background-color: white;
+  position: relative;
+  width: 800px;
+  height: fit-content;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 1rem;
+  border-radius: 1rem;
   z-index: 9999;
+`;
+
+const ModalHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+`;
+
+const ModalText = styled.h2`
+  color: maroon;
+  font-size: 2em;
 `;
 
 const ModalOpenBtn = styled(Button)`
   position: fixed;
   bottom: 1rem;
   right: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 46px;
+  height: 46px;
+  background-color: maroon;
+  color: white;
+  border-radius: 50%;
+  font-size: 1em;
+
+  &:hover {
+    background-color: #4c0202;
+  }
 `;
-const ModalCloseBtn = styled(Button)``;
+const ModalCloseBtn = styled(Button)`
+  width: 36px;
+  height: 36px;
+  background-color: black;
+  border-radius: 4px;
+  color: white;
+  font-size: 1em;
+`;
 
 const Overlay = styled.div`
   cursor: pointer;
@@ -84,10 +118,13 @@ export default function Layout() {
         <ModalWrapper>
           <Overlay onClick={handleCloseModal} />
           <ModalContent>
+            <ModalHeader>
+              <ModalText>Post!</ModalText>
+              <ModalCloseBtn onClick={handleCloseModal}>
+                <HiMiniXMark />
+              </ModalCloseBtn>
+            </ModalHeader>
             <PostTweetForm />
-            <ModalCloseBtn onClick={handleCloseModal}>
-              <HiMiniXMark />
-            </ModalCloseBtn>
           </ModalContent>
         </ModalWrapper>
       )}

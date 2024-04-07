@@ -12,15 +12,14 @@ export const Form = styled.form`
 `;
 
 export const InputBox = styled.div`
-  display: grid;
-  grid-template-columns: 0.1fr 1fr;
-  align-items: center;
   margin-bottom: 10px;
 
   label {
+    display: block;
     font-family: "Cinzel Decorative", cursive;
     color: maroon;
     font-weight: bold;
+    margin-bottom: 0.4rem;
   }
   input {
     background-color: maroon;
@@ -61,7 +60,7 @@ export const FileThumbnail = styled.img`
 
 export const TextareaWrap = styled.div`
   position: relative;
-  grid-column: span 4;
+  grid-column: span 5;
 
   em {
     position: absolute;
@@ -156,38 +155,25 @@ export const Option = styled.div`
 
 // post
 export const ReportContainer = styled.article`
-  /* break-inside: avoid; */
-  /* aspect-ratio: 4 / 3; */
-  /* background: pink;
-  padding: 1rem;
-  border-radius: 0.75rem; */
-  /* flex: 0 0 calc((100% - 2rem) / 3);
-  aspect-ratio: 4 / 3; */
-  /* background: pink; */
-
+  break-inside: avoid;
   border-radius: 0.75rem;
-  /* break-inside: avoid; */
   border: 1.5px solid maroon;
-
-  /* &::before {
-    counter-increment: grid;
-    content: counter(grid);
-  } */
+  &:not(:last-child) {
+    margin-bottom: 2rem;
+  }
 
   &:first-of-type {
+    column-span: all;
     /* aspect-ratio: 1; */
     /* flex-basis: calc(100% - 1rem);  */
     /* margin: 0 0 1em; 
     break-inside: avoid; */
-    grid-column: 1/-1;
+    /* grid-column: 1/-1; */
 
     figure {
       column-count: 3;
 
       figcaption {
-        /* .first {
-          font-size: 5em;
-        } */
       }
     }
 
@@ -222,9 +208,11 @@ export const ReportContainer = styled.article`
     /* column-count: 2; */
   }
   &.long {
-    /* background-color: violet; */
-    grid-column: 1/-1;
-    column-count: 2;
+    column-span: all;
+
+    figure {
+      column-count: 3;
+    }
   }
 `;
 export const ReportHeadline = styled.div`

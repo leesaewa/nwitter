@@ -19,7 +19,7 @@ export default function Home() {
     <Container className="main-container">
       <Left />
       <Section>
-        <PostTweetForm />
+        {/* <PostTweetForm /> */}
         <Timeline />
       </Section>
     </Container>
