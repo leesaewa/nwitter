@@ -119,7 +119,7 @@ const UserName = styled.span`
   transition: all 0.5s ease-in-out;
 `;
 
-const Left = () => {
+export default function Left() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slides = [
     // 슬라이드에 추가할 이미지 경로들
@@ -196,6 +196,4 @@ const Left = () => {
       </RankingWrapper>
     </Container>
   );
-};
-
-export default Left;
+}

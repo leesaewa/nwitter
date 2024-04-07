@@ -7,9 +7,20 @@ import { useModal } from "./common/Modal";
 import PostTweetForm from "./post-tweet-form";
 import { Button } from "../style/GlobalStyles";
 import { HiMiniPencilSquare, HiMiniXMark } from "react-icons/hi2";
+import Left from "./common/Left";
 
 const Main = styled.div`
   margin: 0 auto;
+`;
+
+const Container = styled.main`
+  max-width: 1800px;
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+  gap: 2rem;
+  padding-top: 100px;
 `;
 
 const Footer = styled.footer``;
@@ -105,8 +116,11 @@ export default function Layout() {
     <Main className="root_container">
       <Navigation />
 
-      <Outlet />
+      <Container className="main-container">
+        <Left />
 
+        <Outlet />
+      </Container>
       <Ad />
       <Footer>footer</Footer>
 
