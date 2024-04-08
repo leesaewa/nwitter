@@ -72,7 +72,7 @@ export const ModalCloseBtn = styled(Button)`
   font-size: 1em;
 `;
 
-export const ConfirlBtn = styled(Button)`
+export const ConfirmBtn = styled(Button)`
   height: 40px;
   background-color: maroon;
   color: white;
@@ -96,3 +96,5 @@ export const Overlay = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 999;
 `;
+
+export const CancelButton = styled.button``;

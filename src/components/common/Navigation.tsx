@@ -121,7 +121,7 @@ export default function Navigation() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  });
+  }, []);
 
   return (
     <Header className={scrolled ? "scrolled" : ""}>

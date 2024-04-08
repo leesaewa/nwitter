@@ -7,8 +7,9 @@ import {
   ModalTitle,
   Overlay,
   ModalCloseBtn,
-  ConfirlBtn,
+  ConfirmBtn,
   BasicText,
+  CancelButton,
 } from "../../style/Modal";
 import PostTweetForm from "../post-tweet-form";
 
@@ -20,12 +21,14 @@ export const ModalProvider = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [isForm, setIsForm] = useState(false);
+  const [confirmCallback, setConfirmCallback] = useState(null);
 
   // 모달 열기 함수
-  const openModal = (content, tweetForm = false) => {
+  const openModal = (content, tweetForm = false, callback = null) => {
     setModalContent(content);
     setIsModalOpen(true);
     setIsForm(tweetForm);
+    setConfirmCallback(callback);
     document.body.style.overflow = "hidden";
   };
 
@@ -34,7 +37,15 @@ export const ModalProvider = ({ children }) => {
     setIsModalOpen(false);
     setModalContent(null);
     setIsForm(false);
+    setConfirmCallback(null);
     document.body.style.overflow = "auto";
+  };
+
+  const handleConfirm = () => {
+    if (confirmCallback) {
+      confirmCallback(); // confirmCallback 함수 실행
+    }
+    closeModal(); // 모달 닫기
   };
 
   return (
@@ -47,7 +58,9 @@ export const ModalProvider = ({ children }) => {
           <Overlay onClick={closeModal} />
           <ModalContent className="basic-modal-cont">
             <ModalHeader>
-              <ModalTitle>{isForm ? "Post!" : "알림"}</ModalTitle>
+              <ModalTitle>
+                {isForm ? "Post!" : isCreate ? "회원가입" : "알림"}
+              </ModalTitle>
               {isForm && (
                 <ModalCloseBtn onClick={closeModal}>
                   <HiMiniXMark />
@@ -55,8 +68,19 @@ export const ModalProvider = ({ children }) => {
               )}
             </ModalHeader>
             {isForm && <PostTweetForm onCloseModal={closeModal} />}
+
             <BasicText>{modalContent}</BasicText>
-            <ConfirlBtn onClick={closeModal}>확인</ConfirlBtn>
+
+            {confirmCallback ? (
+              <>
+                <CancelButton onClick={closeModal}>취소</CancelButton>
+                <ConfirmBtn onClick={handleConfirm} className="test">
+                  확인
+                </ConfirmBtn>
+              </>
+            ) : (
+              <ConfirmBtn onClick={closeModal}>확인</ConfirmBtn>
+            )}
           </ModalContent>
         </ModalWrapper>
       )}
@@ -64,5 +88,4 @@ export const ModalProvider = ({ children }) => {
   );
 };
 
-// useContext를 통해 모달 관련 상태와 함수를 사용할 수 있는 훅
 export const useModal = () => useContext(ModalContext);

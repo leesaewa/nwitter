@@ -40,9 +40,6 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .container{
-    /* border:1px solid red */
-
-
   }
   .eng {
     font-family: "Cinzel Decorative", cursive;
@@ -109,21 +106,6 @@ const GlobalStyles = createGlobalStyle`
 
   .test-layout{
     columns: 20vw;
-    /* display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16%,1fr));
-    gap:1rem;
-    margin-top: 1rem; */
-    /* columns: 25rem;
-    gap: 1rem;
-    counter-reset: grid; */
-    /* display: flex;
-    flex-wrap: wrap;
-    gap: 1rem; */
-  
-    /* column-count: 3; 
-    column-width: 200px;
-    column-gap: 1em; */
-
   }
 
 `;
