@@ -16,6 +16,7 @@ import {
   RightHeader,
   LinkButton,
   SocialBtnWrap,
+  Video,
 } from "../style/Account";
 import GithubButton from "../components/github-btn";
 import { InputBox } from "../style/Tweet";
@@ -59,13 +60,10 @@ export default function Login() {
   return (
     <Container className="container">
       <LeftSide>
-        <iframe
-          width="100%"
-          height="100vh"
-          src="https://www.youtube.com/embed/FPtubly5siQ?start=4&autoplay=1&mute=1&loop=1&controls=0&si=U3i87Wgs5KO1bViT"
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        ></iframe>
+        <Video autoPlay="autoplay" loop muted>
+          <source src="/main.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </Video>
       </LeftSide>
 
       <RightSide>

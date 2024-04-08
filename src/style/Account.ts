@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { Button } from "./GlobalStyles";
 
 export const Container = styled.main`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  /* grid-template-columns: 1fr 1fr; */
   align-items: center;
   justify-content: center;
   gap: 2rem;
@@ -13,11 +13,49 @@ export const Container = styled.main`
   margin: 0 auto;
 `;
 
+export const Video = styled.video`
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -2;
+`;
+
 export const LeftSide = styled.section`
-  /* border: 1px solid green; */
+  overflow: hidden;
+  position: relative;
+  /* width: 100%;
+  padding-bottom: 56.25%; */
+
+  &::after {
+    content: "";
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.6;
+    z-index: -1;
+  }
+
+  /* iframe {
+    position: absolute;
+    top: -60px;
+    bottom: -60px;
+    left: 0;
+    width: 100%;
+    height: calc(100% + 120px);
+    border: none;
+  } */
 `;
 export const RightSide = styled.section`
   /* border: 1px solid red; */
+  background-color: rgba(255, 255, 255, 0.86);
+  border-radius: 10px;
+  padding: 2rem;
 `;
 export const RightHeader = styled.header`
   > div {
@@ -46,7 +84,7 @@ export const LogoTitle = styled.h1`
 `;
 
 export const Form = styled.form`
-  margin-top: 50px;
+  margin-top: 2rem;
   margin-bottom: 10px;
   display: flex;
   flex-direction: column;
@@ -89,7 +127,7 @@ export const Switcher = styled.p`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 4rem;
+  margin-top: 2rem;
   border-top: 1.5px dotted #4c0202;
   padding-top: 1rem;
 
