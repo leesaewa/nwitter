@@ -71,6 +71,11 @@ const FileInput = styled.input`
   display: none;
 `;
 
+const Time = styled.p`
+  margin-top: 0.6rem;
+  font-size: 0.7em;
+`;
+
 export default function Tweet({
   username,
   photo,
@@ -80,6 +85,7 @@ export default function Tweet({
   userId,
   id,
   avatar,
+  createdAt,
 }: ITweet) {
   const user = auth.currentUser;
   const [edit, setEdit] = useState(false);
@@ -205,6 +211,34 @@ export default function Tweet({
 
   const isEnglish = (str) => /[a-zA-Z]/.test(str);
 
+  // 업로드 시간 표기
+  const getFormattedTime = (timestamp) => {
+    const now = new Date();
+    const timestampDate = new Date(timestamp);
+
+    const diff = now.getTime() - timestampDate.getTime();
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    let formattedTime = "";
+    if (days > 0) {
+      const options = { year: "numeric", month: "short", day: "numeric" };
+      formattedTime = timestampDate.toLocaleDateString("en-US", options);
+    } else if (hours > 0) {
+      formattedTime = `${hours}시간 전`;
+    } else if (minutes > 0) {
+      formattedTime = `${minutes}분 전`;
+    } else {
+      formattedTime = "방금 전";
+    }
+
+    return formattedTime;
+  };
+
+  const formattedCreatedAt = getFormattedTime(createdAt);
+
   {
     /* tweet.length가 800 이하인 경우: short 클래스 추가
       tweet.length가 1999 이하인 경우: middle 클래스 추가
@@ -212,7 +246,7 @@ export default function Tweet({
   }
   return (
     <ReportContainer
-      className={`${
+      className={
         tweet.length <= 800
           ? "short"
           : tweet.length <= 1999
@@ -220,7 +254,7 @@ export default function Tweet({
           : tweet.length >= 2000
           ? "long"
           : ""
-      } ${photo ? "img" : ""}`}
+      }
     >
       <ReportHeadline>
         {user?.uid === userId && edit ? (
@@ -264,6 +298,7 @@ export default function Tweet({
                   <Username>{username}</Username>
                   <Username className="hover">{username}</Username>
                 </p>
+                <Time>{formattedCreatedAt} </Time>
               </div>
             </Link>
           </UserWrapper>

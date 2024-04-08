@@ -163,18 +163,10 @@ export const ReportContainer = styled.article`
   }
 
   &:first-of-type {
-    column-span: all;
-    /* aspect-ratio: 1; */
-    /* flex-basis: calc(100% - 1rem);  */
-    /* margin: 0 0 1em; 
-    break-inside: avoid; */
-    /* grid-column: 1/-1; */
+    column-span: all !important;
 
     figure {
-      column-count: 3;
-
-      figcaption {
-      }
+      column-count: 3 !important;
     }
 
     h2 {
