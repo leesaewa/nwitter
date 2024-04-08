@@ -77,10 +77,19 @@ const EditBtn = styled(Button)`
   }
 `;
 
+const CoverUpload = styled.label``;
+const CoverInput = styled.input``;
+const CoverImg = styled.img`
+  border: 1px solid blue;
+  width: 100%;
+  height: 200px;
+`;
+
 export default function Profile() {
   const user = auth.currentUser;
   const [isLoading, setLoading] = useState(true);
   const [avatar, setAvatar] = useState(user?.photoURL);
+  const [coverImg, setCoverImg] = useState(user?.cover || "");
   const [tweets, setTweets] = useState<ITweet[]>([]);
   const [edit, setEdit] = useState(false);
   const [editName, setEditName] = useState(user?.displayName || "");
@@ -97,6 +106,16 @@ export default function Profile() {
 
   const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditName(e.target.value);
+  };
+
+  const onCoverChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const storageRef = ref(storage, `covers/${user?.uid}`);
+    await uploadBytes(storageRef, file);
+    const downloadURL = await getDownloadURL(storageRef);
+    setCoverImg(downloadURL);
   };
 
   const fetchTweets = async () => {
@@ -121,6 +140,7 @@ export default function Profile() {
     setEdit(false);
     setEditName(user?.displayName ?? "");
     setAvatar(user?.photoURL);
+    setCoverImg(user?.cover || "");
   };
 
   const onEditSave = async () => {
@@ -137,6 +157,11 @@ export default function Profile() {
         }
         if (avatar !== user.photoURL) {
           updates.photoURL = avatar;
+          isUpdate = true;
+        }
+
+        if (coverImg !== user.cover) {
+          updates.cover = coverImg;
           isUpdate = true;
         }
 
@@ -205,6 +230,17 @@ export default function Profile() {
                   accept="image/*"
                   id="avatarUpload"
                 />
+
+                <CoverUpload htmlFor="coverUpload">
+                  커버업로드
+                  {coverImg ? <CoverImg src={coverImg} /> : <span>커버!!</span>}
+                </CoverUpload>
+                <CoverInput
+                  onChange={onCoverChange}
+                  type="file"
+                  accept="image/*"
+                  id="coverUpload"
+                />
                 <Name>
                   <NameInput
                     type="text"
@@ -215,6 +251,7 @@ export default function Profile() {
               </>
             ) : (
               <>
+                {coverImg ? <CoverImg src={coverImg} /> : "없음"}
                 {avatar ? (
                   <AvatarImg src={avatar} />
                 ) : (
