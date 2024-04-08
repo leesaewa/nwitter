@@ -16,6 +16,7 @@ import {
   ModalCloseBtn,
   Overlay,
 } from "../style/Modal";
+import ScrollToTop from "./common/ScrollToTop";
 
 const Main = styled.div`
   margin: 0 auto;
@@ -79,6 +80,7 @@ export default function Layout() {
       </Container>
       <Ad />
       <Footer>footer</Footer>
+      <ScrollToTop />
 
       <ModalOpenBtn onClick={handleOpenModal}>
         <HiMiniPencilSquare />
