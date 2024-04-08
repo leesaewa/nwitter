@@ -75,7 +75,6 @@ export default function Layout() {
 
       <Container className="main-container">
         <Left />
-
         <Outlet />
       </Container>
       <Ad />

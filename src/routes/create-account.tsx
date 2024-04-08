@@ -98,6 +98,7 @@ export default function CreateAccount({ isCreate, setIsCreate }) {
         <Input
           type="submit"
           value={isLoading ? "Loading..." : "Create Account"}
+          className="eng"
         />
       </Form>
       {error !== "" ? <Error>{error}</Error> : null}

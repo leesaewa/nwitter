@@ -58,9 +58,7 @@ export const ModalProvider = ({ children }) => {
           <Overlay onClick={closeModal} />
           <ModalContent className="basic-modal-cont">
             <ModalHeader>
-              <ModalTitle>
-                {isForm ? "Post!" : isCreate ? "회원가입" : "알림"}
-              </ModalTitle>
+              <ModalTitle>{isForm ? "Post!" : "알림"}</ModalTitle>
               {isForm && (
                 <ModalCloseBtn onClick={closeModal}>
                   <HiMiniXMark />
