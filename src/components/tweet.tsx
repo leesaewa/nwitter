@@ -363,12 +363,10 @@ export default function Tweet({
               <em>{tweet.length}/8000</em>
             </TextareaWrap>
           ) : (
-            <ReportCont>
+            <ReportCont className={isEnglish(tweet.charAt(0)) ? "eng" : "kor"}>
               {tweet.length > 0 && (
                 <>
-                  <em className={`first ${isEnglish(tweet) ? "eng" : ""}`}>
-                    {tweet.charAt(0)}
-                  </em>
+                  <em>{tweet.charAt(0)}</em>
                   {tweet.slice(1)}
                 </>
               )}

@@ -161,7 +161,7 @@ export default function Profile() {
   }, []);
 
   return (
-    <Main>
+    <Main className="profile-container">
       {isLoading ? (
         <LoadingScreen />
       ) : (

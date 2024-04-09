@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
-export const Main = styled.main``;
+export const Main = styled.main`
+  &.profile-container {
+    /* 이 곳에 profile용 css custom이 들어감 */
+  }
+`;
 
 export const Container = styled.div`
   max-width: 1800px;

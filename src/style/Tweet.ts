@@ -187,6 +187,12 @@ export const ReportContainer = styled.article`
     }
   }
 
+  &.short:first-child {
+    figure {
+      column-count: 2 !important;
+    }
+  }
+
   &.short {
     column-span: all;
 
@@ -222,7 +228,7 @@ export const ReportFigure = styled.figure`
 export const ReportCaption = styled.figcaption``;
 
 export const ReportCont = styled.div`
-  line-height: 1.4rem;
+  line-height: 1.8rem;
   color: maroon;
   word-break: break-all;
 
@@ -231,8 +237,6 @@ export const ReportCont = styled.div`
       font-size: 72px;
       float: left;
       padding: 10px 2rem 10px 0;
-      /* height: 64px; */
-      /* background-color: maroon; */
       margin-right: 10px;
       color: #ffd020;
       text-shadow: 2px 2px 0 maroon;
@@ -242,6 +246,14 @@ export const ReportCont = styled.div`
     &:first-line {
       font-weight: bold;
       font-size: 24px;
+    }
+  }
+
+  &.kor {
+    &:first-letter {
+      margin-right: 0;
+      padding: 0 1rem 10px 0;
+      line-height: 60px;
     }
   }
 `;
