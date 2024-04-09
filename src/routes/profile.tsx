@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import { auth, db, storage } from "../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {
@@ -17,88 +16,33 @@ import { updateProfile } from "firebase/auth";
 import { ITweet } from "../components/timeline";
 import Tweet from "../components/tweet";
 import LoadingScreen from "../components/loading-screen";
-import { HiUser } from "react-icons/hi2";
+import {
+  HiUser,
+  HiOutlineCog8Tooth,
+  HiOutlineCheck,
+  HiMiniXMark,
+} from "react-icons/hi2";
 import Left from "../components/common/Left";
-
-const Main = styled.main``;
-
-const Container = styled.div`
-  max-width: 1800px;
-  width: 100%;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 5fr;
-  gap: 2rem;
-  padding-top: 100px;
-`;
-
-const EditContainer = styled.div`
-  width: 100%;
-  position: relative;
-  padding-top: 100px;
-  border: 1px solid maroon;
-  border-radius: 0.75rem;
-  overflow: hidden;
-`;
-
-const AvatarUpload = styled.label`
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background-color: maroon;
-  overflow: hidden;
-`;
-const AvatarImg = styled.img`
-  width: 100px;
-  height: 100px;
-`;
-const AvatarInput = styled.input`
-  display: none;
-`;
-
-const Name = styled.span``;
-const NameInput = styled.input``;
-
-const Tweets = styled.div``;
-
-const ButtonContainer = styled.div`
-  position: absolute;
-  right: 0;
-  top: 0;
-`;
-
-const Button = styled.button`
-  cursor: pointer;
-  border-radius: 5px;
-  border: 1px solid transparent;
-  font-size: 14px;
-  padding: 4px 10px;
-  &:hover {
-    background-color: aliceblue;
-  }
-`;
-
-const EditBtn = styled(Button)`
-  background-color: cadetblue;
-  &.btn-save {
-    background-color: cornflowerblue;
-  }
-  &.btn-cancel {
-    background-color: cornsilk;
-  }
-`;
-
-const CoverUpload = styled.label``;
-const CoverInput = styled.input``;
-const CoverImg = styled.img`
-  border: 1px solid blue;
-  width: 100%;
-  height: 200px;
-`;
+import {
+  Main,
+  Container,
+  AvatarImg,
+  AvatarInput,
+  AvatarUpload,
+  AvatarWrapper,
+  ButtonContainer,
+  CoverImg,
+  CoverInput,
+  CoverUpload,
+  EditBtn,
+  EditContainer,
+  Name,
+  NameInput,
+  Tweets,
+  UserInfo,
+  CoverWrapper,
+  UserBox,
+} from "../style/Profile";
 
 export default function Profile() {
   const user = auth.currentUser;
@@ -227,59 +171,73 @@ export default function Profile() {
           <EditContainer>
             <ButtonContainer>
               <EditBtn
-                className="btn-save"
+                className={edit ? "btn-save" : "btn-edit"}
                 onClick={edit ? onEditSave : onEdit}
               >
-                {edit ? "Save" : "Edit"}
+                {edit ? <HiOutlineCheck /> : <HiOutlineCog8Tooth />}
               </EditBtn>
               {edit && (
                 <EditBtn className="btn-cancel" onClick={onEditCancel}>
-                  Cancel
+                  <HiMiniXMark />
                 </EditBtn>
               )}
             </ButtonContainer>
 
             {edit ? (
-              <>
-                <AvatarUpload htmlFor="avatarUpload">
-                  {avatar ? <AvatarImg src={avatar} /> : <HiUser />}
-                </AvatarUpload>
-                <AvatarInput
-                  onChange={onAvatarChange}
-                  type="file"
-                  accept="image/*"
-                  id="avatarUpload"
-                />
-
-                <CoverUpload htmlFor="coverUpload">
-                  커버업로드
-                  {coverImg ? <CoverImg src={coverImg} /> : <span>커버!!</span>}
-                </CoverUpload>
-                <CoverInput
-                  onChange={onCoverChange}
-                  type="file"
-                  accept="image/*"
-                  id="coverUpload"
-                />
-                <Name>
-                  <NameInput
-                    type="text"
-                    value={editName}
-                    onChange={onNameChange}
+              <UserInfo>
+                <CoverWrapper>
+                  <CoverUpload htmlFor="coverUpload">
+                    {coverImg ? (
+                      <CoverImg src={coverImg} />
+                    ) : (
+                      <span>커버!!</span>
+                    )}
+                  </CoverUpload>
+                  <CoverInput
+                    onChange={onCoverChange}
+                    type="file"
+                    accept="image/*"
+                    id="coverUpload"
                   />
-                </Name>
-              </>
+                </CoverWrapper>
+                <UserBox>
+                  <AvatarWrapper>
+                    <AvatarUpload htmlFor="avatarUpload">
+                      {avatar ? <AvatarImg src={avatar} /> : <HiUser />}
+                    </AvatarUpload>
+                    <AvatarInput
+                      onChange={onAvatarChange}
+                      type="file"
+                      accept="image/*"
+                      id="avatarUpload"
+                    />
+                  </AvatarWrapper>
+                  <Name>
+                    <NameInput
+                      type="text"
+                      value={editName}
+                      onChange={onNameChange}
+                    />
+                  </Name>
+                </UserBox>
+              </UserInfo>
             ) : (
-              <>
+              <UserInfo>
                 {/* 기본 화면 */}
-                {coverImg ? (
-                  <CoverImg src={coverImg} />
-                ) : (
-                  <CoverImg src="/logo.png" />
-                )}
-                {avatar ? <AvatarImg src={avatar} /> : <HiUser />}
-                <Name>{user?.displayName ?? "Anonymous"}</Name>
-              </>
+                <CoverWrapper>
+                  {coverImg ? (
+                    <CoverImg src={coverImg} />
+                  ) : (
+                    <CoverImg src="/logo.png" />
+                  )}
+                </CoverWrapper>
+                <UserBox>
+                  <AvatarWrapper>
+                    {avatar ? <AvatarImg src={avatar} /> : <HiUser />}
+                  </AvatarWrapper>
+                  <Name>{user?.displayName ?? "Anonymous"}</Name>
+                </UserBox>
+              </UserInfo>
             )}
           </EditContainer>
         </>

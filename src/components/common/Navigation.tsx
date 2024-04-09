@@ -13,6 +13,7 @@ const Header = styled.header`
   width: 100%;
   border-bottom: 1.5px solid maroon;
   transition: all 0.5s ease-in-out;
+  z-index: 1;
 
   > div {
     display: flex;
