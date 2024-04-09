@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { auth, db, storage } from "../firebase";
-import React, { useEffect, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {
   collection,
@@ -17,13 +17,28 @@ import { updateProfile } from "firebase/auth";
 import { ITweet } from "../components/timeline";
 import Tweet from "../components/tweet";
 import LoadingScreen from "../components/loading-screen";
+import { HiUser } from "react-icons/hi2";
+import Left from "../components/common/Left";
 
-const Container = styled.div``;
+const Main = styled.main``;
+
+const Container = styled.div`
+  max-width: 1800px;
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+  gap: 2rem;
+  padding-top: 100px;
+`;
 
 const EditContainer = styled.div`
   width: 100%;
   position: relative;
-  border: 1px solid red;
+  padding-top: 100px;
+  border: 1px solid maroon;
+  border-radius: 0.75rem;
+  overflow: hidden;
 `;
 
 const AvatarUpload = styled.label`
@@ -140,7 +155,7 @@ export default function Profile() {
     setEdit(false);
     setEditName(user?.displayName ?? "");
     setAvatar(user?.photoURL);
-    setCoverImg(user?.cover || "");
+    setCoverImg(coverImg || "/logo.png");
   };
 
   const onEditSave = async () => {
@@ -152,7 +167,7 @@ export default function Profile() {
         const updates = {};
         let isUpdate = false;
         if (editName !== user.displayName) {
-          updates.displayName = editName; // 이름이 변경됐을 때만 저장
+          updates.displayName = editName;
           isUpdate = true;
         }
         if (avatar !== user.photoURL) {
@@ -167,6 +182,10 @@ export default function Profile() {
 
         if (isUpdate) {
           await updateProfile(user, updates);
+          const userDocRef = doc(db, "users", user.uid);
+          await updateDoc(userDocRef, updates);
+          // await updateDoc(userDocRef, { cover: coverImg });
+
           alert("업데이트 되었습니다.");
         } else {
           alert("수정할 내용이 없습니다.");
@@ -179,12 +198,28 @@ export default function Profile() {
   };
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userDocRef = doc(db, "users", user?.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          if (userData) {
+            setCoverImg(userData.cover || "");
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
     fetchTweets();
+    fetchUserData();
     setLoading(false);
   }, []);
 
   return (
-    <Container className="container">
+    <Main>
       {isLoading ? (
         <LoadingScreen />
       ) : (
@@ -207,22 +242,7 @@ export default function Profile() {
             {edit ? (
               <>
                 <AvatarUpload htmlFor="avatarUpload">
-                  {avatar ? (
-                    <AvatarImg src={avatar} />
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  )}
+                  {avatar ? <AvatarImg src={avatar} /> : <HiUser />}
                 </AvatarUpload>
                 <AvatarInput
                   onChange={onAvatarChange}
@@ -251,39 +271,33 @@ export default function Profile() {
               </>
             ) : (
               <>
-                {coverImg ? <CoverImg src={coverImg} /> : "없음"}
-                {avatar ? (
-                  <AvatarImg src={avatar} />
+                {/* 기본 화면 */}
+                {coverImg ? (
+                  <CoverImg src={coverImg} />
                 ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <CoverImg src="/logo.png" />
                 )}
+                {avatar ? <AvatarImg src={avatar} /> : <HiUser />}
                 <Name>{user?.displayName ?? "Anonymous"}</Name>
               </>
             )}
           </EditContainer>
-
-          {tweets.length > 0 ? (
-            <Tweets>
-              {tweets.map((tweet) => (
-                <Tweet key={tweet.id} {...tweet} />
-              ))}
-            </Tweets>
-          ) : (
-            <span>not yet!</span>
-          )}
         </>
       )}
-    </Container>
+
+      <Container>
+        <Left />
+
+        {tweets.length > 0 ? (
+          <Tweets>
+            {tweets.map((tweet) => (
+              <Tweet key={tweet.id} {...tweet} />
+            ))}
+          </Tweets>
+        ) : (
+          <span>not yet!</span>
+        )}
+      </Container>
+    </Main>
   );
 }

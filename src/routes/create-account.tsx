@@ -1,11 +1,12 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import React, { useState } from "react";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
 import { Form, Input, Error, SocialBtnWrap } from "../style/Account";
 import { InputBox } from "../style/Tweet";
 import GithubButton from "../components/github-btn";
+import { doc, getFirestore, setDoc } from "@firebase/firestore";
 
 export default function CreateAccount({ isCreate, setIsCreate }) {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ export default function CreateAccount({ isCreate, setIsCreate }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [cover, setCover] = useState("");
   const [error, setError] = useState("");
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,6 +27,8 @@ export default function CreateAccount({ isCreate, setIsCreate }) {
       setEmail(value);
     } else if (name === "password") {
       setPassword(value);
+    } else if (name === "cover") {
+      setCover(value);
     }
   };
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -39,13 +43,20 @@ export default function CreateAccount({ isCreate, setIsCreate }) {
         email,
         password
       );
-      console.log(credentials.user);
+
       await updateProfile(credentials.user, {
         displayName: name,
       });
+
+      const userDocRef = doc(getFirestore(), "users", credentials.user.uid);
+      await setDoc(userDocRef, {
+        displayName: name,
+        email: email,
+        cover: cover || "/logo.png",
+      });
+      console.log(credentials.user);
+
       navigate("/");
-      // set the name of the user profile
-      // redirect to the home page
     } catch (e) {
       // setError
       if (e instanceof FirebaseError) {

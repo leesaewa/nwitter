@@ -20,21 +20,22 @@ export default function Channel() {
 
   const fetchUserProfile = async () => {
     try {
-      const tweetQuery = query(
-        collection(db, "tweets"),
-        where("userId", "==", userId),
-        limit(1) // 한 번에 하나의 트윗만 가져옴
-      );
-      const snapshot = await getDocs(tweetQuery);
-      if (!snapshot.empty) {
-        const userData = snapshot.docs[0].data();
-        setUserProfile({
-          username: userData.username || "Anonymous",
-          avatar: userData.avatar || null,
-        });
-      } else {
-        console.log("User not found");
-      }
+      // const tweetQuery = query(
+      //   collection(db, "users"),
+      //   where("userId", "==", userId),
+      //   limit(1) // 한 번에 하나의 트윗만 가져옴
+      // );
+      // const snapshot = await getDocs(tweetQuery);
+      // if (!snapshot.empty) {
+      //   const userData = snapshot.docs[0].data();
+      //   setUserProfile({
+      //     username: userData.username || "Anonymous",
+      //     avatar: userData.avatar || null,
+      //     cover: userData.cover || null,
+      //   });
+      // } else {
+      //   console.log("User not found");
+      // }
     } catch (error) {
       console.error("Error fetching user profile:", error);
     }

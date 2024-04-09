@@ -164,6 +164,7 @@ export const ReportContainer = styled.article`
 
   &:first-of-type {
     column-span: all !important;
+    column-count: 1 !important;
 
     figure {
       column-count: 3 !important;
@@ -223,7 +224,7 @@ export const ReportCaption = styled.figcaption``;
 export const ReportCont = styled.div`
   line-height: 1.4rem;
   color: maroon;
-  word-break: break-word;
+  word-break: break-all;
 
   &:first-child {
     &:first-letter {

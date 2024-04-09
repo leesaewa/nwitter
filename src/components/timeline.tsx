@@ -15,6 +15,7 @@ import { Unsubscribe } from "firebase/auth";
 export interface ITweet {
   id: string;
   photo: string;
+  cover: string;
   headline: string;
   subhead: string;
   tweet: string;
@@ -50,6 +51,7 @@ export default function Timeline() {
             username,
             photo,
             avatar,
+            cover,
             headline,
             subhead,
           } = doc.data();
@@ -63,6 +65,7 @@ export default function Timeline() {
             username,
             createdAt,
             avatar,
+            cover,
           };
         });
         setTweet(tweets);
