@@ -7,6 +7,8 @@ import {
   query,
   where,
   limit,
+  doc,
+  getDoc,
 } from "firebase/firestore";
 import Tweet from "../components/tweet";
 import { useParams } from "react-router-dom";
@@ -14,28 +16,23 @@ import LoadingScreen from "../components/loading-screen";
 
 export default function Channel() {
   const { userId } = useParams(); // URL에서 userId 가져오기
-  const [userProfile, setUserProfile] = useState(null);
+  // const [userProfile, setUserProfile] = useState(null);
   const [userTweets, setUserTweets] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const [editName, setEditName] = useState(userId?.displayName || "");
+  const [avatar, setAvatar] = useState(userId?.photoURL);
+  const [coverImg, setCoverImg] = useState(userId?.cover || "");
 
   const fetchUserProfile = async () => {
     try {
-      // const tweetQuery = query(
-      //   collection(db, "users"),
-      //   where("userId", "==", userId),
-      //   limit(1) // 한 번에 하나의 트윗만 가져옴
-      // );
-      // const snapshot = await getDocs(tweetQuery);
-      // if (!snapshot.empty) {
-      //   const userData = snapshot.docs[0].data();
-      //   setUserProfile({
-      //     username: userData.username || "Anonymous",
-      //     avatar: userData.avatar || null,
-      //     cover: userData.cover || null,
-      //   });
-      // } else {
-      //   console.log("User not found");
-      // }
+      const userDocRef = doc(db, "users", userId);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        setEditName(userData.displayName || "");
+        setAvatar(userData.photoURL || "");
+        setCoverImg(userData.cover || "");
+      }
     } catch (error) {
       console.error("Error fetching user profile:", error);
     }
@@ -63,10 +60,10 @@ export default function Channel() {
   };
 
   useEffect(() => {
-    setLoading(false);
-    fetchUserProfile();
     fetchTweets();
-  }, [userId]);
+    fetchUserProfile();
+    setLoading(false);
+  }, []);
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -75,17 +72,11 @@ export default function Channel() {
   return (
     <div>
       <div>
-        {userProfile && (
-          <div>
-            <span>{userProfile.username}</span>
-            {userProfile.avatar ? (
-              <img src={userProfile.avatar} alt="Avatar" />
-            ) : (
-              "유저 아바타 없음"
-            )}
-            {/* 추가된 부분: avatar photoUrl 출력 */}
-          </div>
-        )}
+        <div>
+          <span>{editName}</span>
+          {avatar ? <img src={avatar} alt="Avatar" /> : "유저 아바타 없음"}
+          {coverImg && <img src={coverImg} />}
+        </div>
 
         <hr />
         <hr />

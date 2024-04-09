@@ -115,7 +115,7 @@ export const Button = styled.button`
   gap: 4px;
   width: 32px;
   height: 32px;
-  border-radius: 5px;
+  border-radius: 3px;
   border: 1px solid transparent;
   font-size: 14px;
   color: white;
@@ -123,7 +123,7 @@ export const Button = styled.button`
 
 export const EditBtn = styled(Button)`
   &.btn-save {
-    background-color: cornflowerblue;
+    background-color: #235caa;
   }
   &.btn-edit {
     background-color: maroon;

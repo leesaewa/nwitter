@@ -44,8 +44,13 @@ export default function CreateAccount({ isCreate, setIsCreate }) {
         password
       );
 
+      const defaultPhotoURL = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+        name
+      )}&background=random`;
+
       await updateProfile(credentials.user, {
         displayName: name,
+        photoURL: defaultPhotoURL,
       });
 
       const userDocRef = doc(getFirestore(), "users", credentials.user.uid);
@@ -53,6 +58,7 @@ export default function CreateAccount({ isCreate, setIsCreate }) {
         displayName: name,
         email: email,
         cover: cover || "/logo.png",
+        photoURL: defaultPhotoURL,
       });
       console.log(credentials.user);
 
