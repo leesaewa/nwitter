@@ -57,7 +57,7 @@ export default function CreateAccount({ isCreate, setIsCreate }) {
       await setDoc(userDocRef, {
         displayName: name,
         email: email,
-        cover: cover || "/logo.png",
+        cover: cover || "/cover.webp",
         photoURL: defaultPhotoURL,
       });
       console.log(credentials.user);

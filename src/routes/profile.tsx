@@ -43,6 +43,7 @@ import {
   CoverWrapper,
   UserBox,
 } from "../style/Profile";
+import NoData from "../components/common/NoData";
 
 export default function Profile() {
   const user = auth.currentUser;
@@ -92,6 +93,20 @@ export default function Profile() {
     }));
     setTweets(tweetsData);
   };
+  const fetchUserData = async () => {
+    try {
+      const userDocRef = doc(db, "users", user?.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        if (userData) {
+          setCoverImg(userData.cover || "");
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
   const onEdit = () => {
     setEdit(true);
   };
@@ -99,7 +114,7 @@ export default function Profile() {
     setEdit(false);
     setEditName(user?.displayName ?? "");
     setAvatar(user?.photoURL);
-    setCoverImg(coverImg || "/logo.png");
+    setCoverImg(coverImg || "/cover.webp");
   };
 
   const onEditSave = async () => {
@@ -128,8 +143,6 @@ export default function Profile() {
           await updateProfile(user, updates);
           const userDocRef = doc(db, "users", user.uid);
           await updateDoc(userDocRef, updates);
-          // await updateDoc(userDocRef, { cover: coverImg });
-
           alert("업데이트 되었습니다.");
         } else {
           alert("수정할 내용이 없습니다.");
@@ -142,21 +155,6 @@ export default function Profile() {
   };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const userDocRef = doc(db, "users", user?.uid);
-        const userDocSnap = await getDoc(userDocRef);
-        if (userDocSnap.exists()) {
-          const userData = userDocSnap.data();
-          if (userData) {
-            setCoverImg(userData.cover || "");
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
     fetchTweets();
     fetchUserData();
     setLoading(false);
@@ -187,11 +185,7 @@ export default function Profile() {
               <UserInfo>
                 <CoverWrapper>
                   <CoverUpload htmlFor="coverUpload">
-                    {coverImg ? (
-                      <CoverImg src={coverImg} />
-                    ) : (
-                      <span>커버!!</span>
-                    )}
+                    {coverImg && <CoverImg src={coverImg} />}
                   </CoverUpload>
                   <CoverInput
                     onChange={onCoverChange}
@@ -225,11 +219,7 @@ export default function Profile() {
               <UserInfo>
                 {/* 기본 화면 */}
                 <CoverWrapper>
-                  {coverImg ? (
-                    <CoverImg src={coverImg} />
-                  ) : (
-                    <CoverImg src="/logo.png" />
-                  )}
+                  {coverImg && <CoverImg src={coverImg} />}
                 </CoverWrapper>
                 <UserBox>
                   <AvatarWrapper>
@@ -253,7 +243,7 @@ export default function Profile() {
             ))}
           </Tweets>
         ) : (
-          <span>not yet!</span>
+          <NoData />
         )}
       </Container>
     </Main>

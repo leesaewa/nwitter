@@ -13,6 +13,19 @@ import {
 import Tweet from "../components/tweet";
 import { useParams } from "react-router-dom";
 import LoadingScreen from "../components/loading-screen";
+import NoData from "../components/common/NoData";
+import Left from "../components/common/Left";
+import {
+  EditContainer,
+  Container,
+  AvatarImg,
+  AvatarWrapper,
+  CoverImg,
+  Name,
+  UserInfo,
+  CoverWrapper,
+  UserBox,
+} from "../style/Profile";
 
 export default function Channel() {
   const { userId } = useParams(); // URL에서 userId 가져오기
@@ -21,7 +34,8 @@ export default function Channel() {
   const [isLoading, setLoading] = useState(true);
   const [editName, setEditName] = useState(userId?.displayName || "");
   const [avatar, setAvatar] = useState(userId?.photoURL);
-  const [coverImg, setCoverImg] = useState(userId?.cover || "");
+  // const [coverImg, setCoverImg] = useState(userId?.cover || "");
+  const [coverImg, setCoverImg] = useState(null);
 
   const fetchUserProfile = async () => {
     try {
@@ -71,22 +85,33 @@ export default function Channel() {
 
   return (
     <div>
-      <div>
-        <div>
-          <span>{editName}</span>
-          {avatar ? <img src={avatar} alt="Avatar" /> : "유저 아바타 없음"}
-          {coverImg && <img src={coverImg} />}
-        </div>
+      <EditContainer>
+        <UserInfo>
+          <CoverWrapper>
+            {coverImg ? (
+              <CoverImg src={coverImg} width="1920" height="320" />
+            ) : null}
+          </CoverWrapper>
 
-        <hr />
-        <hr />
+          <UserBox>
+            <AvatarWrapper>
+              {avatar ? <AvatarImg src={avatar} alt="Avatar" /> : "no"}
+            </AvatarWrapper>
+            <Name>
+              {editName} <em className="eng">'s Channel</em>
+            </Name>
+          </UserBox>
+        </UserInfo>
+      </EditContainer>
 
+      <Container>
+        <Left />
         {userTweets.length > 0 ? (
           userTweets.map((tweet) => <Tweet key={tweet.id} {...tweet} />)
         ) : (
-          <span>Not Yet!</span>
+          <NoData />
         )}
-      </div>
+      </Container>
     </div>
   );
 }
