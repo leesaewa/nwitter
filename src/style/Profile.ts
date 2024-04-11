@@ -161,19 +161,25 @@ export const Button = styled.button`
   height: 32px;
   border-radius: 3px;
   border: 1px solid transparent;
-  font-size: 14px;
+  font-size: 2em;
   color: white;
 `;
 
 export const EditBtn = styled(Button)`
   &.btn-save {
     background-color: #235caa;
+    font-size: 14px;
   }
   &.btn-edit {
-    background-color: maroon;
+    background-color: #333;
   }
   &.btn-cancel {
     background-color: #ffd020;
     color: maroon;
+    font-size: 14px;
+  }
+
+  &:hover {
+    opacity: 0.9;
   }
 `;

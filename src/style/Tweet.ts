@@ -130,17 +130,21 @@ export const Username = styled.span`
 `;
 
 export const Headline = styled.h2`
-  color: maroon;
-  font-size: 4em;
-  line-height: 5rem;
+  &.headline {
+    color: maroon;
+    font-size: 4em;
+    line-height: 5rem;
+  }
 `;
 export const Subhead = styled.h3`
-  color: #4c0202;
-  font-size: 3em;
-  border-top: 1px solid maroon;
-  padding-top: 1rem;
-  margin-top: 1rem;
-  line-height: 4rem;
+  &.subhead {
+    color: #4c0202;
+    font-size: 3em;
+    border-top: 1px solid maroon;
+    padding-top: 1rem;
+    margin-top: 1rem;
+    line-height: 4rem;
+  }
 `;
 
 export const Option = styled.div`
@@ -170,11 +174,11 @@ export const ReportContainer = styled.article`
       column-count: 3 !important;
     }
 
-    h2 {
+    .headline {
       font-size: 7em;
       line-height: 7rem;
     }
-    h3 {
+    .subhead {
       font-size: 5em;
       line-height: 6rem;
     }

@@ -25,6 +25,9 @@ import {
   Option,
   ReportCont,
   TextareaWrap,
+  PostWrapper,
+  UploadWrap,
+  UploadInner,
 } from "../style/Tweet";
 import { useModal } from "./common/Modal";
 
@@ -33,44 +36,25 @@ import {
   ModalContent,
   ModalHeader,
   ModalTitle,
-  ModalCloseBtn,
   Overlay,
+  ModalButtonContainer,
+  EditDelete,
 } from "../style/Modal";
+import {
+  HiOutlineTrash,
+  HiOutlineCog8Tooth,
+  HiOutlineCheck,
+  HiMiniXMark,
+} from "react-icons/hi2";
+import { EditBtn } from "../style/Profile";
+import { DeleteBtn } from "../style/Button";
 
 const TextArea = styled.textarea``;
 
 const ButtonContainer = styled.div`
-  /* border: 1px solid red; */
-`;
-
-const Button = styled.button`
-  cursor: pointer;
-  border-radius: 5px;
-  border: 1px solid transparent;
-  font-size: 14px;
-  padding: 4px 10px;
-  &:hover {
-    background-color: aliceblue;
-  }
-`;
-
-const DeleteBtn = styled(Button)`
-  background-color: maroon;
-  color: white;
-
-  &:hover {
-    color: maroon;
-  }
-`;
-
-const EditBtn = styled(Button)`
-  background-color: cadetblue;
-  &.btn-save {
-    background-color: cornflowerblue;
-  }
-  &.btn-cancel {
-    background-color: cornsilk;
-  }
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;
 
 const FileBtn = styled.label`
@@ -104,6 +88,7 @@ export default function Tweet({
   const [editedSubhead, setEditedSubhead] = useState(subhead);
   const [editPhoto, setEditPhoto] = useState<File | null>(null);
   const [thumbnail, setThumbnail] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { openModal } = useModal();
 
   // Delete tweet
@@ -118,6 +103,7 @@ export default function Tweet({
         const photoRef = ref(storage, `tweets/${user.uid}/${id}`);
         await deleteObject(photoRef);
       }
+      alert("삭제했습니다.");
     } catch (e) {
       console.log(e);
     }
@@ -144,11 +130,6 @@ export default function Tweet({
   // Cancel tweet editing and revert to the previous state
   const onEditCancel = () => {
     setEdit(false);
-    // setEditedTweet(tweet);
-    // setEditedHeadline(headline);
-    // setEditedSubhead(subhead);
-    // setEditPhoto(null);
-
     setIsModalOpen(false);
     document.body.style.overflow = "auto";
   };
@@ -158,6 +139,34 @@ export default function Tweet({
     try {
       const confirmSave = confirm("수정하시겠습니까?");
       if (!confirmSave || user?.uid !== userId) return;
+
+      if (
+        !user ||
+        editedTweet === "" ||
+        editedTweet.length > 8000 ||
+        editedTweet.length < 400 ||
+        editedHeadline.length < 20 ||
+        !editPhoto
+      ) {
+        let errorMessage = "";
+
+        if (!user) {
+          errorMessage = "로그인이 필요합니다.";
+        } else if (editedTweet === "" && editedHeadline === "") {
+          errorMessage = "Headline과 기사 내용을 입력해주세요";
+        } else if (editedTweet.length > 8000) {
+          errorMessage = "기사 내용을 8000자 이내로 작성해주세요.";
+        } else if (editedTweet.length < 400) {
+          errorMessage = "기사 내용을 최소 400자 이상으로 작성해주세요.";
+        } else if (editedHeadline.length < 20) {
+          errorMessage = "Headline은 20자 이상으로 작성해주세요.";
+        } else if (!editPhoto) {
+          errorMessage = "기사 이미지를 첨부해주세요";
+        }
+
+        openModal(errorMessage);
+        return;
+      }
 
       const updates = {};
       let isUpdate = false;
@@ -255,16 +264,8 @@ export default function Tweet({
 
     return formattedTime;
   };
-
   const formattedCreatedAt = getFormattedTime(createdAt);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  {
-    /* tweet.length가 800 이하인 경우: short 클래스 추가
-      tweet.length가 1999 이하인 경우: middle 클래스 추가
-      tweet.length가 2000 이상인 경우: long 클래스 추가 */
-  }
   return (
     <ReportContainer
       className={
@@ -278,40 +279,12 @@ export default function Tweet({
       }
     >
       <ReportHeadline>
-        {/* {user?.uid === userId && edit ? (
-          <div>
-            <InputBox>
-              <label htmlFor="headline">Headline</label>
-              <input value={editedHeadline} onChange={onTitleChange} />
-            </InputBox>
-            <InputBox>
-              {editedSubhead && (
-                <>
-                  <label htmlFor="subhead">Subhead</label>
-                  <input value={editedSubhead} onChange={onSubheadChange} />
-                </>
-              )}
-            </InputBox>
-          </div>
-        ) : (
-          <div>
-            <Headline className={isEnglish(headline) ? "eng" : ""}>
-              {headline}
-            </Headline>
-            {subhead && (
-              <Subhead className={isEnglish(subhead) ? "eng" : ""}>
-                {subhead}
-              </Subhead>
-            )}
-          </div>
-        )} */}
-
         <div>
-          <Headline className={isEnglish(headline) ? "eng" : ""}>
+          <Headline className={`headline ${isEnglish(headline) ? "eng" : ""}`}>
             {headline}
           </Headline>
           {subhead && (
-            <Subhead className={isEnglish(subhead) ? "eng" : ""}>
+            <Subhead className={`subhead ${isEnglish(subhead) ? "eng" : ""}`}>
               {subhead}
             </Subhead>
           )}
@@ -336,57 +309,19 @@ export default function Tweet({
           </UserWrapper>
 
           {user?.uid === userId ? (
-            // <ButtonContainer>
-            //   {edit ? (
-            //     <>
-            //       <EditBtn className="btn-save" onClick={onEditSave}>
-            //         Save
-            //       </EditBtn>
-            //       <EditBtn className="btn-cancel" onClick={onEditCancel}>
-            //         Cancel
-            //       </EditBtn>
-            //     </>
-            //   ) : (
-            //     <EditBtn onClick={onEdit}>Edit</EditBtn>
-            //   )}
-            //   <DeleteBtn onClick={onDelete}>Delete</DeleteBtn>
-            // </ButtonContainer>
-
             <ButtonContainer>
-              <EditBtn onClick={onEdit}>Edit</EditBtn>
-              <DeleteBtn onClick={onDelete}>Delete</DeleteBtn>
+              <EditBtn onClick={onEdit} className="btn-edit">
+                <HiOutlineCog8Tooth />
+              </EditBtn>
+              <EditDelete onClick={onDelete}>
+                <HiOutlineTrash />
+              </EditDelete>
             </ButtonContainer>
           ) : null}
         </Option>
       </ReportHeadline>
 
       <ReportFigure>
-        {/* {photo && user?.uid === userId && edit && (
-          <>
-            <FileBtn htmlFor="editThumbnail" className="file-upload">
-              {thumbnail ? (
-                <FileThumbnail src={thumbnail} />
-              ) : (
-                <FileThumbnail src={photo} />
-              )}
-            </FileBtn>
-            <FileInput
-              onChange={onEditPhoto}
-              type="file"
-              id="editThumbnail"
-              accept="image/*"
-            />
-            {thumbnail && (
-              <DeleteBtn type="button" onClick={onDeletePhoto}>
-                X
-              </DeleteBtn>
-            )}
-          </>
-        )} */}
-
-        {/* {(!photo || !(user?.uid === userId && edit)) && (
-          <>{photo && <FileThumbnail src={photo} />}</>
-        )} */}
         {photo && <FileThumbnail src={photo} />}
 
         <ReportCaption>
@@ -400,39 +335,15 @@ export default function Tweet({
               </>
             )}
           </ReportCont>
-
-          {/* {user?.uid === userId && edit ? (
-            <TextareaWrap>
-              <TextArea
-                className="scroll"
-                maxLength={8000}
-                value={editedTweet}
-                onChange={onChange}
-              />
-              <em>{tweet.length}/8000</em>
-            </TextareaWrap>
-          ) : (
-            <ReportCont className={isEnglish(tweet.charAt(0)) ? "en" : "ko"}>
-              {tweet.length > 0 && (
-                <>
-                  <em className={isEnglish(tweet.charAt(0)) ? "eng" : ""}>
-                    {tweet.charAt(0)}
-                  </em>
-                  {tweet.slice(1)}
-                </>
-              )}
-            </ReportCont>
-          )} */}
         </ReportCaption>
       </ReportFigure>
 
       {isModalOpen && (
         <ModalWrapper>
           <Overlay onClick={onEditCancel} />
-          <ModalContent>
+          <ModalContent className="edit-modal">
             <ModalHeader>
-              <ModalTitle>Post!</ModalTitle>
-              <ModalCloseBtn onClick={onEditCancel}>X</ModalCloseBtn>
+              <ModalTitle>기사 수정</ModalTitle>
             </ModalHeader>
 
             <>
@@ -451,42 +362,48 @@ export default function Tweet({
                 </InputBox>
               </div>
 
-              <FileBtn htmlFor="editThumbnail" className="file-upload">
-                {thumbnail ? (
-                  <FileThumbnail src={thumbnail} />
-                ) : (
-                  <FileThumbnail src={photo} />
-                )}
-              </FileBtn>
-              <FileInput
-                onChange={onEditPhoto}
-                type="file"
-                id="editThumbnail"
-                accept="image/*"
-              />
-              {thumbnail && (
-                <DeleteBtn type="button" onClick={onDeletePhoto}>
-                  X
-                </DeleteBtn>
-              )}
+              <PostWrapper>
+                <TextareaWrap>
+                  <TextArea
+                    className="scroll"
+                    maxLength={8000}
+                    value={editedTweet}
+                    onChange={onChange}
+                  />
+                  <em>{editedTweet.length}/8000</em>
+                </TextareaWrap>
+                <UploadWrap>
+                  <UploadInner>
+                    <FileBtn htmlFor="editThumbnail" className="file-upload">
+                      {thumbnail ? (
+                        <FileThumbnail src={thumbnail} />
+                      ) : (
+                        <FileThumbnail src={photo} />
+                      )}
+                    </FileBtn>
+                    <FileInput
+                      onChange={onEditPhoto}
+                      type="file"
+                      id="editThumbnail"
+                      accept="image/*"
+                    />
+                    {thumbnail && (
+                      <DeleteBtn type="button" onClick={onDeletePhoto}>
+                        X
+                      </DeleteBtn>
+                    )}
+                  </UploadInner>
+                </UploadWrap>
+              </PostWrapper>
 
-              <TextareaWrap>
-                <TextArea
-                  className="scroll"
-                  maxLength={8000}
-                  value={editedTweet}
-                  onChange={onChange}
-                />
-                <em>{tweet.length}/8000</em>
-              </TextareaWrap>
-
-              {/* button */}
-              <EditBtn className="btn-save" onClick={onEditSave}>
-                Save
-              </EditBtn>
-              <EditBtn className="btn-cancel" onClick={onEditCancel}>
-                Cancel
-              </EditBtn>
+              <ModalButtonContainer>
+                <EditBtn className="btn-save" onClick={onEditSave}>
+                  <HiOutlineCheck /> Save
+                </EditBtn>
+                <EditBtn className="btn-cancel" onClick={onEditCancel}>
+                  <HiMiniXMark /> Cancel
+                </EditBtn>
+              </ModalButtonContainer>
             </>
           </ModalContent>
         </ModalWrapper>

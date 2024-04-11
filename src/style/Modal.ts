@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button } from "./GlobalStyles";
+import { Button } from "./Profile";
 
 export const ModalWrapper = styled.div`
   position: fixed;
@@ -38,6 +38,32 @@ export const ModalContent = styled.div`
       padding: 1rem 0;
       margin-bottom: 0;
     }
+  }
+
+  &.edit-modal {
+    > div {
+      display: block;
+      border-bottom: 1px solid maroon;
+      padding: 0 0 1rem;
+      margin-bottom: 1rem;
+    }
+  }
+`;
+
+export const EditDelete = styled(Button)`
+  background-color: maroon;
+`;
+
+export const ModalButtonContainer = styled.p`
+  margin-top: 1rem;
+  display: flex;
+
+  button {
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    width: auto;
+    flex: 1;
   }
 `;
 

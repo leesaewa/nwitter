@@ -22,7 +22,13 @@ const Main = styled.div`
   margin: 0 auto;
 `;
 
-const Footer = styled.footer``;
+const Footer = styled.footer`
+  text-align: center;
+  padding: 2rem 0;
+  color: maroon;
+  border-top: 1.5px solid maroon;
+  margin-top: 2rem;
+`;
 
 const ModalOpenBtn = styled(Button)`
   position: fixed;
@@ -66,8 +72,8 @@ export default function Layout() {
 
       <Outlet />
 
-      <Ad />
-      <Footer>footer</Footer>
+      {/* <Ad /> */}
+      <Footer>The Daily Prophet</Footer>
       <ScrollToTop />
 
       <ModalOpenBtn onClick={handleOpenModal}>
