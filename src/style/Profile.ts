@@ -29,7 +29,7 @@ export const Main = styled.main`
         > img {
         }
         > figcaption {
-          border: 1px solid red;
+          /* border: 1px solid red; */
         }
       }
     }

@@ -40,9 +40,10 @@ export const ModalProvider = ({ children }) => {
       {isModalOpen && (
         <ModalWrapper>
           <Overlay onClick={closeModal} />
+
           <ModalContent className="basic-modal-cont">
             <ModalHeader>
-              <ModalTitle>알림"</ModalTitle>
+              <ModalTitle>알림</ModalTitle>
             </ModalHeader>
 
             <BasicText>{modalContent}</BasicText>

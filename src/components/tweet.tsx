@@ -26,6 +26,16 @@ import {
   ReportCont,
   TextareaWrap,
 } from "../style/Tweet";
+import { useModal } from "./common/Modal";
+
+import {
+  ModalWrapper,
+  ModalContent,
+  ModalHeader,
+  ModalTitle,
+  ModalCloseBtn,
+  Overlay,
+} from "../style/Modal";
 
 const TextArea = styled.textarea``;
 
@@ -94,6 +104,7 @@ export default function Tweet({
   const [editedSubhead, setEditedSubhead] = useState(subhead);
   const [editPhoto, setEditPhoto] = useState<File | null>(null);
   const [thumbnail, setThumbnail] = useState<string | null>(null);
+  const { openModal } = useModal();
 
   // Delete tweet
   const onDelete = async () => {
@@ -126,15 +137,20 @@ export default function Tweet({
   // Activate tweet editing
   const onEdit = () => {
     setEdit(true);
+    setIsModalOpen(true);
+    document.body.style.overflow = "hidden";
   };
 
   // Cancel tweet editing and revert to the previous state
   const onEditCancel = () => {
     setEdit(false);
-    setEditedTweet(tweet);
-    setEditedHeadline(headline);
-    setEditedSubhead(subhead);
-    setEditPhoto(null);
+    // setEditedTweet(tweet);
+    // setEditedHeadline(headline);
+    // setEditedSubhead(subhead);
+    // setEditPhoto(null);
+
+    setIsModalOpen(false);
+    document.body.style.overflow = "auto";
   };
 
   // Save the edited tweet and update it in Firestore
@@ -174,6 +190,9 @@ export default function Tweet({
       } else {
         alert("변경된 내용이 없습니다.");
       }
+
+      setIsModalOpen(false);
+      document.body.style.overflow = "auto";
     } catch (error) {
       console.error("Error updating tweet", error);
     }
@@ -239,6 +258,8 @@ export default function Tweet({
 
   const formattedCreatedAt = getFormattedTime(createdAt);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   {
     /* tweet.length가 800 이하인 경우: short 클래스 추가
       tweet.length가 1999 이하인 경우: middle 클래스 추가
@@ -257,7 +278,7 @@ export default function Tweet({
       }
     >
       <ReportHeadline>
-        {user?.uid === userId && edit ? (
+        {/* {user?.uid === userId && edit ? (
           <div>
             <InputBox>
               <label htmlFor="headline">Headline</label>
@@ -283,7 +304,18 @@ export default function Tweet({
               </Subhead>
             )}
           </div>
-        )}
+        )} */}
+
+        <div>
+          <Headline className={isEnglish(headline) ? "eng" : ""}>
+            {headline}
+          </Headline>
+          {subhead && (
+            <Subhead className={isEnglish(subhead) ? "eng" : ""}>
+              {subhead}
+            </Subhead>
+          )}
+        </div>
 
         <Option>
           <UserWrapper>
@@ -304,19 +336,24 @@ export default function Tweet({
           </UserWrapper>
 
           {user?.uid === userId ? (
+            // <ButtonContainer>
+            //   {edit ? (
+            //     <>
+            //       <EditBtn className="btn-save" onClick={onEditSave}>
+            //         Save
+            //       </EditBtn>
+            //       <EditBtn className="btn-cancel" onClick={onEditCancel}>
+            //         Cancel
+            //       </EditBtn>
+            //     </>
+            //   ) : (
+            //     <EditBtn onClick={onEdit}>Edit</EditBtn>
+            //   )}
+            //   <DeleteBtn onClick={onDelete}>Delete</DeleteBtn>
+            // </ButtonContainer>
+
             <ButtonContainer>
-              {edit ? (
-                <>
-                  <EditBtn className="btn-save" onClick={onEditSave}>
-                    Save
-                  </EditBtn>
-                  <EditBtn className="btn-cancel" onClick={onEditCancel}>
-                    Cancel
-                  </EditBtn>
-                </>
-              ) : (
-                <EditBtn onClick={onEdit}>Edit</EditBtn>
-              )}
+              <EditBtn onClick={onEdit}>Edit</EditBtn>
               <DeleteBtn onClick={onDelete}>Delete</DeleteBtn>
             </ButtonContainer>
           ) : null}
@@ -324,7 +361,7 @@ export default function Tweet({
       </ReportHeadline>
 
       <ReportFigure>
-        {photo && user?.uid === userId && edit && (
+        {/* {photo && user?.uid === userId && edit && (
           <>
             <FileBtn htmlFor="editThumbnail" className="file-upload">
               {thumbnail ? (
@@ -345,14 +382,26 @@ export default function Tweet({
               </DeleteBtn>
             )}
           </>
-        )}
+        )} */}
 
-        {(!photo || !(user?.uid === userId && edit)) && (
+        {/* {(!photo || !(user?.uid === userId && edit)) && (
           <>{photo && <FileThumbnail src={photo} />}</>
-        )}
+        )} */}
+        {photo && <FileThumbnail src={photo} />}
 
         <ReportCaption>
-          {user?.uid === userId && edit ? (
+          <ReportCont className={isEnglish(tweet.charAt(0)) ? "en" : "ko"}>
+            {tweet.length > 0 && (
+              <>
+                <em className={isEnglish(tweet.charAt(0)) ? "eng" : ""}>
+                  {tweet.charAt(0)}
+                </em>
+                {tweet.slice(1)}
+              </>
+            )}
+          </ReportCont>
+
+          {/* {user?.uid === userId && edit ? (
             <TextareaWrap>
               <TextArea
                 className="scroll"
@@ -373,9 +422,75 @@ export default function Tweet({
                 </>
               )}
             </ReportCont>
-          )}
+          )} */}
         </ReportCaption>
       </ReportFigure>
+
+      {isModalOpen && (
+        <ModalWrapper>
+          <Overlay onClick={onEditCancel} />
+          <ModalContent>
+            <ModalHeader>
+              <ModalTitle>Post!</ModalTitle>
+              <ModalCloseBtn onClick={onEditCancel}>X</ModalCloseBtn>
+            </ModalHeader>
+
+            <>
+              <div>
+                <InputBox>
+                  <label htmlFor="headline">Headline</label>
+                  <input value={editedHeadline} onChange={onTitleChange} />
+                </InputBox>
+                <InputBox>
+                  {editedSubhead && (
+                    <>
+                      <label htmlFor="subhead">Subhead</label>
+                      <input value={editedSubhead} onChange={onSubheadChange} />
+                    </>
+                  )}
+                </InputBox>
+              </div>
+
+              <FileBtn htmlFor="editThumbnail" className="file-upload">
+                {thumbnail ? (
+                  <FileThumbnail src={thumbnail} />
+                ) : (
+                  <FileThumbnail src={photo} />
+                )}
+              </FileBtn>
+              <FileInput
+                onChange={onEditPhoto}
+                type="file"
+                id="editThumbnail"
+                accept="image/*"
+              />
+              {thumbnail && (
+                <DeleteBtn type="button" onClick={onDeletePhoto}>
+                  X
+                </DeleteBtn>
+              )}
+
+              <TextareaWrap>
+                <TextArea
+                  className="scroll"
+                  maxLength={8000}
+                  value={editedTweet}
+                  onChange={onChange}
+                />
+                <em>{tweet.length}/8000</em>
+              </TextareaWrap>
+
+              {/* button */}
+              <EditBtn className="btn-save" onClick={onEditSave}>
+                Save
+              </EditBtn>
+              <EditBtn className="btn-cancel" onClick={onEditCancel}>
+                Cancel
+              </EditBtn>
+            </>
+          </ModalContent>
+        </ModalWrapper>
+      )}
     </ReportContainer>
   );
 }
