@@ -249,7 +249,7 @@ export const ReportCont = styled.div`
     }
   }
 
-  &.kor {
+  &.ko {
     &:first-letter {
       margin-right: 0;
       padding: 0 1rem 10px 0;

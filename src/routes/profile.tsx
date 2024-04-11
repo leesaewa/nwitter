@@ -235,7 +235,6 @@ export default function Profile() {
 
       <Container>
         <Left />
-
         {tweets.length > 0 ? (
           <Tweets>
             {tweets.map((tweet) => (

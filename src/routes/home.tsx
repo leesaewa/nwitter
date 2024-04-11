@@ -8,7 +8,7 @@ export const Main = styled.main`
   width: 100%;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 5fr;
+  grid-template-columns: 340px 5fr;
   gap: 2rem;
   padding-top: 100px;
 `;

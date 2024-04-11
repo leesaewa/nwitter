@@ -2,7 +2,37 @@ import styled from "styled-components";
 
 export const Main = styled.main`
   &.profile-container {
-    /* 이 곳에 profile용 css custom이 들어감 */
+    article {
+      grid-column: 2/-1;
+      > div {
+        > div {
+          h2 {
+            display: inline;
+            font-size: 3em;
+            line-height: 3.4rem;
+          }
+          h3 {
+            display: inline;
+            border: 0;
+            padding: 0;
+            margin-top: 0;
+            margin-left: 20px;
+            font-size: 3em;
+            line-height: 3rem;
+          }
+        }
+      }
+
+      > figure {
+        column-count: 2 !important;
+
+        > img {
+        }
+        > figcaption {
+          border: 1px solid red;
+        }
+      }
+    }
   }
 `;
 
@@ -11,7 +41,7 @@ export const Container = styled.div`
   width: 100%;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 5fr;
+  grid-template-columns: 340px 5fr;
   gap: 2rem;
   padding-top: 100px;
 `;

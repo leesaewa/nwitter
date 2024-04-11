@@ -16,6 +16,7 @@ import LoadingScreen from "../components/loading-screen";
 import NoData from "../components/common/NoData";
 import Left from "../components/common/Left";
 import {
+  Main,
   EditContainer,
   Container,
   AvatarImg,
@@ -28,13 +29,11 @@ import {
 } from "../style/Profile";
 
 export default function Channel() {
-  const { userId } = useParams(); // URL에서 userId 가져오기
-  // const [userProfile, setUserProfile] = useState(null);
-  const [userTweets, setUserTweets] = useState([]);
+  const { userId } = useParams();
   const [isLoading, setLoading] = useState(true);
+  const [userTweets, setUserTweets] = useState([]);
   const [editName, setEditName] = useState(userId?.displayName || "");
   const [avatar, setAvatar] = useState(userId?.photoURL);
-  // const [coverImg, setCoverImg] = useState(userId?.cover || "");
   const [coverImg, setCoverImg] = useState(null);
 
   const fetchUserProfile = async () => {
@@ -84,34 +83,40 @@ export default function Channel() {
   }
 
   return (
-    <div>
-      <EditContainer>
-        <UserInfo>
-          <CoverWrapper>
-            {coverImg ? (
-              <CoverImg src={coverImg} width="1920" height="320" />
-            ) : null}
-          </CoverWrapper>
+    <Main className="profile-container">
+      {isLoading ? (
+        <LoadingScreen />
+      ) : (
+        <>
+          <EditContainer>
+            <UserInfo>
+              <CoverWrapper>
+                {coverImg ? (
+                  <CoverImg src={coverImg} width="1920" height="320" />
+                ) : null}
+              </CoverWrapper>
 
-          <UserBox>
-            <AvatarWrapper>
-              {avatar ? <AvatarImg src={avatar} alt="Avatar" /> : "no"}
-            </AvatarWrapper>
-            <Name>
-              {editName} <em className="eng">'s Channel</em>
-            </Name>
-          </UserBox>
-        </UserInfo>
-      </EditContainer>
+              <UserBox>
+                <AvatarWrapper>
+                  {avatar ? <AvatarImg src={avatar} alt="Avatar" /> : "no"}
+                </AvatarWrapper>
+                <Name>
+                  {editName} <em className="eng">'s Channel</em>
+                </Name>
+              </UserBox>
+            </UserInfo>
+          </EditContainer>
 
-      <Container>
-        <Left />
-        {userTweets.length > 0 ? (
-          userTweets.map((tweet) => <Tweet key={tweet.id} {...tweet} />)
-        ) : (
-          <NoData />
-        )}
-      </Container>
-    </div>
+          <Container>
+            <Left />
+            {userTweets.length > 0 ? (
+              userTweets.map((tweet) => <Tweet key={tweet.id} {...tweet} />)
+            ) : (
+              <NoData />
+            )}
+          </Container>
+        </>
+      )}
+    </Main>
   );
 }
