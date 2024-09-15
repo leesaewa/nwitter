@@ -28,7 +28,13 @@ const Logo = styled.img`
   filter: invert(1) brightness(150%);
 `;
 
-export default function GithubButton({ isCreate, setIsCreate }) {
+export default function GithubButton({
+  isCreate,
+  setIsCreate,
+}: {
+  isCreate: boolean;
+  setIsCreate: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const navigate = useNavigate();
   const onClick = async () => {
     try {

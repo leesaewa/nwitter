@@ -8,7 +8,7 @@ import {
   ref,
   uploadBytes,
 } from "firebase/storage";
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Avatar,
@@ -99,7 +99,7 @@ export default function Tweet({
     if (!confirmDelete || user?.uid !== userId) return;
     try {
       await deleteDoc(doc(db, "tweets", id));
-      if (photo) {
+      if (editPhoto) {
         const photoRef = ref(storage, `tweets/${user.uid}/${id}`);
         await deleteObject(photoRef);
       }
@@ -168,7 +168,7 @@ export default function Tweet({
         return;
       }
 
-      const updates = {};
+      const updates: Record<string, any> = {};
       let isUpdate = false;
 
       if (editPhoto) {
@@ -232,15 +232,15 @@ export default function Tweet({
     }
   };
 
-  const onDeletePhoto = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onDeletePhoto = () => {
     setEditPhoto(null);
     setThumbnail(null);
   };
 
-  const isEnglish = (str) => /[a-zA-Z]/.test(str);
+  const isEnglish = (str: string): boolean => /[a-zA-Z]/.test(str);
 
   // 업로드 시간 표기
-  const getFormattedTime = (timestamp) => {
+  const getFormattedTime = (timestamp: number): string => {
     const now = new Date();
     const timestampDate = new Date(timestamp);
 
@@ -252,8 +252,11 @@ export default function Tweet({
 
     let formattedTime = "";
     if (days > 0) {
-      const options = { year: "numeric", month: "short", day: "numeric" };
-      formattedTime = timestampDate.toLocaleDateString("en-US", options);
+      formattedTime = timestampDate.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
     } else if (hours > 0) {
       formattedTime = `${hours}시간 전`;
     } else if (minutes > 0) {
@@ -338,7 +341,7 @@ export default function Tweet({
         </ReportCaption>
       </ReportFigure>
 
-      {isModalOpen && (
+      {edit && isModalOpen && (
         <ModalWrapper>
           <Overlay onClick={onEditCancel} />
           <ModalContent className="edit-modal">

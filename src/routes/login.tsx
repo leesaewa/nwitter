@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
@@ -40,6 +40,7 @@ export default function Login() {
       setPassword(value);
     }
   };
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
@@ -60,7 +61,7 @@ export default function Login() {
   return (
     <Container className="container">
       <LeftSide>
-        <Video autoPlay="autoplay" loop muted>
+        <Video autoPlay loop muted>
           <source src="/main.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </Video>
@@ -128,14 +129,14 @@ export default function Login() {
         <Switcher>
           {isCreate ? (
             <>
-              <em className="eng">Already an account?</em>
+              <em className="eng">Already have an account?</em>
               <LinkButton onClick={() => setIsCreate(false)} className="eng">
                 Log in
               </LinkButton>
             </>
           ) : (
             <>
-              <em className="eng">Dont'have an account?</em>
+              <em className="eng">Don't have an account?</em>
               <LinkButton onClick={() => setIsCreate(true)} className="eng">
                 Create one
               </LinkButton>

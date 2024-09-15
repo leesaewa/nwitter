@@ -99,6 +99,7 @@ export const ModalCloseBtn = styled(Button)`
 `;
 
 export const ConfirmBtn = styled(Button)`
+  width: 100%;
   height: 40px;
   background-color: maroon;
   color: white;
@@ -123,4 +124,4 @@ export const Overlay = styled.div`
   z-index: 999;
 `;
 
-export const CancelButton = styled.button``;
+// export const CancelButton = styled.button``;

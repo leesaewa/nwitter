@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import { ReactNode, createContext, useContext, useState } from "react";
 import {
   ModalWrapper,
   ModalContent,
@@ -9,13 +9,24 @@ import {
   BasicText,
 } from "../../style/Modal";
 
-const ModalContext = createContext();
+// createContext의 기본값으로 undefined를 설정
+const ModalContext = createContext<
+  | {
+      isModalOpen: boolean;
+      modalContent: React.ReactNode | null;
+      openModal: (content: ReactNode) => void;
+      closeModal: () => void;
+    }
+  | undefined
+>(undefined);
 
-export const ModalProvider = ({ children }) => {
+export const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState(null);
+  const [modalContent, setModalContent] = useState<React.ReactNode | null>(
+    null
+  );
 
-  const openModal = (content) => {
+  const openModal = (content: ReactNode) => {
     setModalContent(content);
     setIsModalOpen(true);
     document.body.style.overflow = "hidden";
@@ -56,4 +67,10 @@ export const ModalProvider = ({ children }) => {
   );
 };
 
-export const useModal = () => useContext(ModalContext);
+export const useModal = () => {
+  const context = useContext(ModalContext);
+  if (context === undefined) {
+    throw new Error("useModal must be used within a ModalProvider");
+  }
+  return context;
+};

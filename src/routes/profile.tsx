@@ -12,16 +12,11 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { updateProfile } from "firebase/auth";
+import { updateProfile, User as FirebaseUser } from "firebase/auth";
 import { ITweet } from "../components/timeline";
 import Tweet from "../components/tweet";
 import LoadingScreen from "../components/loading-screen";
-import {
-  HiUser,
-  HiOutlineCog8Tooth,
-  HiOutlineCheck,
-  HiMiniXMark,
-} from "react-icons/hi2";
+import { HiUser, HiOutlineCog, HiOutlineCheck, HiX } from "react-icons/hi";
 import Left from "../components/common/Left";
 import {
   Main,
@@ -45,17 +40,24 @@ import {
 } from "../style/Profile";
 import NoData from "../components/common/NoData";
 
+interface User {
+  uid: string;
+  displayName?: string | null;
+  photoURL?: string | null;
+  cover?: string | null; // cover 필드를 optional로 변경
+}
+
 export default function Profile() {
-  const user = auth.currentUser;
+  const user = auth.currentUser as FirebaseUser | null;
   const [isLoading, setLoading] = useState(true);
-  const [avatar, setAvatar] = useState(user?.photoURL);
-  const [coverImg, setCoverImg] = useState(user?.cover || "");
+  const [avatar, setAvatar] = useState<string | null>(user?.photoURL || null);
+  const [coverImg, setCoverImg] = useState<string | null>(null); // 초기 값은 null로 설정
   const [tweets, setTweets] = useState<ITweet[]>([]);
   const [edit, setEdit] = useState(false);
-  const [editName, setEditName] = useState(user?.displayName || "");
+  const [editName, setEditName] = useState<string>(user?.displayName || "");
 
   const onAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (!file) return;
 
     const storageRef = ref(storage, `avatars/${user?.uid}`);
@@ -69,7 +71,7 @@ export default function Profile() {
   };
 
   const onCoverChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (!file) return;
 
     const storageRef = ref(storage, `covers/${user?.uid}`);
@@ -90,31 +92,36 @@ export default function Profile() {
     const tweetsData = snapshot.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
-    }));
+    })) as ITweet[];
     setTweets(tweetsData);
   };
+
   const fetchUserData = async () => {
     try {
-      const userDocRef = doc(db, "users", user?.uid);
+      const userDocRef = user?.uid ? doc(db, "users", user.uid) : null;
+      if (!userDocRef) return;
       const userDocSnap = await getDoc(userDocRef);
       if (userDocSnap.exists()) {
-        const userData = userDocSnap.data();
-        if (userData) {
-          setCoverImg(userData.cover || "");
+        const userData = userDocSnap.data() as User; // 프로젝트에서 정의한 User 타입으로 캐스팅
+        if (userData && userData.cover) {
+          // cover 데이터가 있는지 체크
+          setCoverImg(userData.cover); // 데이터가 있을 때만 설정
         }
       }
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      console.error("사용자 데이터를 불러오는 중 오류 발생:", error);
     }
   };
+
   const onEdit = () => {
     setEdit(true);
   };
+
   const onEditCancel = () => {
     setEdit(false);
-    setEditName(user?.displayName ?? "");
-    setAvatar(user?.photoURL);
-    setCoverImg(coverImg || "/cover.webp");
+    setEditName(user?.displayName || "");
+    setAvatar(user?.photoURL || null);
+    setCoverImg(null); // 편집 취소 시 초기화
   };
 
   const onEditSave = async () => {
@@ -123,7 +130,7 @@ export default function Profile() {
       if (!confirmResult) return;
 
       if (user) {
-        const updates = {};
+        const updates: Partial<User> = {};
         let isUpdate = false;
         if (editName !== user.displayName) {
           updates.displayName = editName;
@@ -134,13 +141,18 @@ export default function Profile() {
           isUpdate = true;
         }
 
-        if (coverImg !== user.cover) {
+        // if (coverImg && coverImg !== user.cover) {
+        //   updates.cover = coverImg;
+        //   isUpdate = true;
+        // }
+
+        if (coverImg) {
           updates.cover = coverImg;
           isUpdate = true;
         }
 
         if (isUpdate) {
-          await updateProfile(user, updates);
+          await updateProfile(auth.currentUser as FirebaseUser, updates);
           const userDocRef = doc(db, "users", user.uid);
           await updateDoc(userDocRef, updates);
           alert("업데이트 되었습니다.");
@@ -150,7 +162,7 @@ export default function Profile() {
       }
       setEdit(false);
     } catch (error) {
-      console.error("error", error);
+      console.error("오류 발생:", error);
     }
   };
 
@@ -172,11 +184,11 @@ export default function Profile() {
                 className={edit ? "btn-save" : "btn-edit"}
                 onClick={edit ? onEditSave : onEdit}
               >
-                {edit ? <HiOutlineCheck /> : <HiOutlineCog8Tooth />}
+                {edit ? <HiOutlineCheck /> : <HiOutlineCog />}
               </EditBtn>
               {edit && (
                 <EditBtn className="btn-cancel" onClick={onEditCancel}>
-                  <HiMiniXMark />
+                  <HiX />
                 </EditBtn>
               )}
             </ButtonContainer>
@@ -225,7 +237,7 @@ export default function Profile() {
                   <AvatarWrapper>
                     {avatar ? <AvatarImg src={avatar} /> : <HiUser />}
                   </AvatarWrapper>
-                  <Name>{user?.displayName ?? "Anonymous"}</Name>
+                  <Name>{user?.displayName ?? "익명"}</Name>
                 </UserBox>
               </UserInfo>
             )}

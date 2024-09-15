@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
-import Ad from "./common/Ad";
 import Navigation from "./common/Navigation";
-import PostTweetForm from "./post-tweet-form";
+import PostTweetForm from "./post-tweet-form.tsx";
 import { Button } from "../style/GlobalStyles";
 import { HiMiniPencilSquare, HiMiniXMark } from "react-icons/hi2";
 
@@ -16,7 +15,6 @@ import {
   Overlay,
 } from "../style/Modal";
 import ScrollToTop from "./common/ScrollToTop";
-import { useModal } from "./common/Modal";
 
 const Main = styled.div`
   margin: 0 auto;
@@ -50,13 +48,11 @@ const ModalOpenBtn = styled(Button)`
 `;
 
 export default function Layout() {
-  const { openModal } = useModal(); // 모달 열기 함수를 가져옴
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 모달 열기
   const handleOpenModal = () => {
     setIsModalOpen(true);
-    // openModal("", true);
     document.body.style.overflow = "hidden";
   };
 

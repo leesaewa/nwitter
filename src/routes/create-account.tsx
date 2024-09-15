@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import React, { useState } from "react";
-import { auth, db } from "../firebase";
+import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
 import { Form, Input, Error, SocialBtnWrap } from "../style/Account";
@@ -8,7 +8,15 @@ import { InputBox } from "../style/Tweet";
 import GithubButton from "../components/github-btn";
 import { doc, getFirestore, setDoc } from "@firebase/firestore";
 
-export default function CreateAccount({ isCreate, setIsCreate }) {
+interface CreateAccountProps {
+  isCreate: boolean;
+  setIsCreate: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function CreateAccount({
+  isCreate,
+  setIsCreate,
+}: CreateAccountProps) {
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
   const [name, setName] = useState("");
@@ -31,6 +39,7 @@ export default function CreateAccount({ isCreate, setIsCreate }) {
       setCover(value);
     }
   };
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");

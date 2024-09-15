@@ -18,14 +18,18 @@ import { useModal } from "./common/Modal";
 
 const TextArea = styled.textarea``;
 
-export default function PostTweetForm({ onCloseModal }) {
+export default function PostTweetForm({
+  onCloseModal,
+}: {
+  onCloseModal: Function;
+}) {
   const [isLoading, setLoading] = useState(false);
   const [tweet, setTweet] = useState("");
   const [headline, setHeadline] = useState("");
   const [subhead, setSubhead] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [thumbnail, setThumbnail] = useState<string | null>(null);
-  const { openModal } = useModal();
+  const { openModal }: any = useModal();
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTweet(e.target.value);
@@ -128,7 +132,7 @@ export default function PostTweetForm({ onCloseModal }) {
 
     onCloseModal();
   };
-  const onDeletePhoto = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onDeletePhoto = () => {
     setFile(null);
     setThumbnail(null);
   };
@@ -157,7 +161,11 @@ export default function PostTweetForm({ onCloseModal }) {
         <UploadWrap>
           <UploadInner>
             <label htmlFor="addPhoto" className="file-upload">
-              {file ? <FileThumbnail src={thumbnail} /> : "이미지 첨부"}
+              {file && thumbnail !== null ? (
+                <FileThumbnail src={thumbnail} />
+              ) : (
+                "이미지 첨부"
+              )}
             </label>
             <FileInput
               onChange={onFileChange}
