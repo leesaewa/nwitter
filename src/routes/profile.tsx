@@ -52,6 +52,7 @@ export default function Profile() {
   const [isLoading, setLoading] = useState(true);
   const [avatar, setAvatar] = useState<string | null>(user?.photoURL || null);
   const [coverImg, setCoverImg] = useState<string | null>(null); // 초기 값은 null로 설정
+  const [originalCoverImg, setOriginalCoverImg] = useState<string | null>(null); // 원래 커버 이미지
   const [tweets, setTweets] = useState<ITweet[]>([]);
   const [edit, setEdit] = useState(false);
   const [editName, setEditName] = useState<string>(user?.displayName || "");
@@ -77,6 +78,7 @@ export default function Profile() {
     const storageRef = ref(storage, `covers/${user?.uid}`);
     await uploadBytes(storageRef, file);
     const downloadURL = await getDownloadURL(storageRef);
+    console.log("Cover Image URL:", downloadURL); // URL 확인
     setCoverImg(downloadURL);
   };
 
@@ -106,6 +108,7 @@ export default function Profile() {
         if (userData && userData.cover) {
           // cover 데이터가 있는지 체크
           setCoverImg(userData.cover); // 데이터가 있을 때만 설정
+          setOriginalCoverImg(userData.cover || null); // 원래 이미지 저장
         }
       }
     } catch (error) {
@@ -121,7 +124,8 @@ export default function Profile() {
     setEdit(false);
     setEditName(user?.displayName || "");
     setAvatar(user?.photoURL || null);
-    setCoverImg(null); // 편집 취소 시 초기화
+    // setCoverImg(null);
+    setCoverImg(originalCoverImg); // 편집 취소 시 초기화
   };
 
   const onEditSave = async () => {
@@ -146,7 +150,7 @@ export default function Profile() {
         //   isUpdate = true;
         // }
 
-        if (coverImg) {
+        if (coverImg !== originalCoverImg) {
           updates.cover = coverImg;
           isUpdate = true;
         }
