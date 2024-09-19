@@ -7,6 +7,8 @@ import {
   Form,
   TextareaWrap,
   InputBox,
+  InputBoxLabel,
+  InputBoxInput,
   PostWrapper,
   UploadWrap,
   UploadInner,
@@ -140,12 +142,12 @@ export default function PostTweetForm({
   return (
     <Form onSubmit={onSubmit}>
       <InputBox>
-        <label htmlFor="headline">Headline</label>
-        <input value={headline} onChange={onFirstTitle} id="headline" />
+        <InputBoxLabel htmlFor="headline">Headline</InputBoxLabel>
+        <InputBoxInput value={headline} onChange={onFirstTitle} id="headline" />
       </InputBox>
       <InputBox>
-        <label htmlFor="subhead">Subhead</label>
-        <input value={subhead} onChange={onAccentTitle} id="subhead" />
+        <InputBoxLabel htmlFor="subhead">Subhead</InputBoxLabel>
+        <InputBoxInput value={subhead} onChange={onAccentTitle} id="subhead" />
       </InputBox>
       <PostWrapper>
         <TextareaWrap>

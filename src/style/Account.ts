@@ -6,7 +6,7 @@ export const Container = styled.main`
   /* grid-template-columns: 1fr 1fr; */
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  /* gap: 2rem; */
   width: 100%;
   height: 100vh;
   max-width: 1800px;
@@ -128,7 +128,7 @@ export const Switcher = styled.p`
   align-items: center;
   flex-direction: column;
   margin-top: 2rem;
-  border-top: 1.5px dotted #4c0202;
+  border-top: 1.5px solid #4c0202;
   padding-top: 1rem;
 
   em {

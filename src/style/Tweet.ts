@@ -13,20 +13,25 @@ export const Form = styled.form`
 
 export const InputBox = styled.div`
   margin-bottom: 10px;
+`;
 
-  label {
-    display: block;
-    font-family: "Cinzel Decorative", cursive;
-    color: maroon;
-    font-weight: bold;
-    margin-bottom: 0.4rem;
-  }
-  input {
-    background-color: maroon;
-    border: 1.5px solid transparent;
-    width: 100%;
-    color: white;
-    padding: 4px;
+export const InputBoxLabel = styled.label`
+  display: block;
+  font-family: "Cinzel Decorative", cursive;
+  color: maroon;
+  font-weight: bold;
+  margin-bottom: 0.4rem;
+`;
+
+export const InputBoxInput = styled.input`
+  background-color: maroon;
+  border: 1.5px solid transparent;
+  width: 100%;
+  color: white;
+  padding: 4px;
+
+  &.login-input {
+    border: 1px solid red;
   }
 `;
 

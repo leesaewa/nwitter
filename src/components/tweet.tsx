@@ -15,6 +15,8 @@ import {
   UserWrapper,
   Username,
   InputBox,
+  InputBoxLabel,
+  InputBoxInput,
   Headline,
   Subhead,
   ReportContainer,
@@ -352,14 +354,20 @@ export default function Tweet({
             <>
               <div>
                 <InputBox>
-                  <label htmlFor="headline">Headline</label>
-                  <input value={editedHeadline} onChange={onTitleChange} />
+                  <InputBoxLabel htmlFor="headline">Headline</InputBoxLabel>
+                  <InputBoxInput
+                    value={editedHeadline}
+                    onChange={onTitleChange}
+                  />
                 </InputBox>
                 <InputBox>
                   {editedSubhead && (
                     <>
-                      <label htmlFor="subhead">Subhead</label>
-                      <input value={editedSubhead} onChange={onSubheadChange} />
+                      <InputBoxLabel htmlFor="subhead">Subhead</InputBoxLabel>
+                      <InputBoxInput
+                        value={editedSubhead}
+                        onChange={onSubheadChange}
+                      />
                     </>
                   )}
                 </InputBox>

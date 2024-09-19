@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
-import { Form, Input, Error, SocialBtnWrap } from "../style/Account";
-import { InputBox } from "../style/Tweet";
+import { Form, Error, SocialBtnWrap } from "../style/Account";
+import { InputBox, InputBoxLabel, InputBoxInput } from "../style/Tweet";
 import GithubButton from "../components/github-btn";
 import { doc, getFirestore, setDoc } from "@firebase/firestore";
 
@@ -86,8 +86,9 @@ export default function CreateAccount({
     <>
       <Form onSubmit={onSubmit}>
         <InputBox>
-          <label htmlFor="name">Name</label>
-          <Input
+          <InputBoxLabel htmlFor="name">Name</InputBoxLabel>
+          <InputBoxInput
+            className="login-input"
             onChange={onChange}
             name="name"
             value={name}
@@ -98,8 +99,9 @@ export default function CreateAccount({
           />
         </InputBox>
         <InputBox>
-          <label htmlFor="email">Email</label>
-          <Input
+          <InputBoxLabel htmlFor="email">Email</InputBoxLabel>
+          <InputBoxInput
+            className="login-input"
             onChange={onChange}
             name="email"
             value={email}
@@ -110,8 +112,9 @@ export default function CreateAccount({
           />
         </InputBox>
         <InputBox>
-          <label htmlFor="password">Password</label>
-          <Input
+          <InputBoxLabel htmlFor="password">Password</InputBoxLabel>
+          <InputBoxInput
+            className="login-input"
             onChange={onChange}
             value={password}
             name="password"
@@ -121,7 +124,7 @@ export default function CreateAccount({
             id="password"
           />
         </InputBox>
-        <Input
+        <InputBoxInput
           type="submit"
           value={isLoading ? "Loading..." : "Create Account"}
           className="eng"
