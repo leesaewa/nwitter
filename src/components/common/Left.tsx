@@ -140,7 +140,11 @@ export default function Left() {
   };
 
   const rankingList = [
-    { img: "/logo.png", username: "test name", link: "" },
+    {
+      img: "https://firebasestorage.googleapis.com/v0/b/nwitter-reloaded-c85df.appspot.com/o/avatars%2FTgr3mDNSX3YyIuFH5St198pvSDh2?alt=media&token=0ff8d38b-d74f-4f3f-a16f-7be9545873bd",
+      username: "Rita Skeeter",
+      link: "/profile/Tgr3mDNSX3YyIuFH5St198pvSDh2",
+    },
     { img: "/logo.png", username: "test name2", link: "" },
     { img: "/logo.png", username: "test name3", link: "" },
     { img: "/logo.png", username: "test name4", link: "" },
@@ -186,7 +190,7 @@ export default function Left() {
             <RankingList key={index}>
               <Link to={list.link}>
                 <UserImg>
-                  <img src={list.img} alt="" />
+                  <img src={list.img} alt={list.username} />
                 </UserImg>
                 <UserName>{list.username}</UserName>
               </Link>

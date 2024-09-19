@@ -234,7 +234,7 @@ export const ReportCaption = styled.figcaption``;
 export const ReportCont = styled.div`
   line-height: 1.8rem;
   color: maroon;
-  word-break: break-all;
+  word-break: break-word;
 
   &:first-child {
     &:first-letter {
