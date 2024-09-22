@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Button } from "./GlobalStyles";
+import { InputBoxInput as TweetInput } from "../style/Tweet";
 
 export const Container = styled.main`
   display: flex;
@@ -63,6 +64,15 @@ export const RightHeader = styled.header`
     justify-content: center;
     align-items: center;
     gap: 1rem;
+
+    @media screen and (max-width: 991px) {
+      flex-direction: column;
+
+      h1 {
+        text-align: center;
+        font-size: 2.6em;
+      }
+    }
   }
 
   h2 {
@@ -73,6 +83,9 @@ export const RightHeader = styled.header`
     margin-top: 2rem;
     border-bottom: 1.5px solid #4c0202;
     padding-bottom: 2rem;
+    @media screen and (max-width: 991px) {
+      font-size: 2.4em;
+    }
   }
 `;
 export const Logo = styled.img`
@@ -92,26 +105,27 @@ export const Form = styled.form`
   width: 100%;
 `;
 
-export const Input = styled.input`
+export const InputBoxInput = styled(TweetInput)`
   padding: 10px 20px;
   border-radius: 50px;
   border: none;
   width: 100%;
   font-size: 16px;
+`;
 
-  &::placeholder {
-    color: #ddd;
-  }
+export const InputButton = styled.button`
+  cursor: pointer;
+  border: 1px solid black;
+  background-color: black;
+  padding: 10px 20px;
+  border-radius: 50px;
+  width: 100%;
+  font-size: 16px;
+  color: white;
 
-  &[type="submit"] {
-    cursor: pointer;
-    background-color: black;
-    color: white;
-
-    &:hover {
-      background-color: white;
-      color: black;
-    }
+  &:hover {
+    background-color: white;
+    color: black;
   }
 `;
 

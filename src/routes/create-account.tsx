@@ -3,8 +3,14 @@ import React, { useState } from "react";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
-import { Form, Error, SocialBtnWrap } from "../style/Account";
-import { InputBox, InputBoxLabel, InputBoxInput } from "../style/Tweet";
+import {
+  Form,
+  Error,
+  SocialBtnWrap,
+  InputButton,
+  InputBoxInput,
+} from "../style/Account";
+import { InputBox, InputBoxLabel } from "../style/Tweet";
 import GithubButton from "../components/github-btn";
 import { doc, getFirestore, setDoc } from "@firebase/firestore";
 
@@ -88,11 +94,10 @@ export default function CreateAccount({
         <InputBox>
           <InputBoxLabel htmlFor="name">Name</InputBoxLabel>
           <InputBoxInput
-            className="login-input"
             onChange={onChange}
             name="name"
             value={name}
-            placeholder="Name"
+            placeholder="Please enter your name."
             type="text"
             required
             id="name"
@@ -101,11 +106,10 @@ export default function CreateAccount({
         <InputBox>
           <InputBoxLabel htmlFor="email">Email</InputBoxLabel>
           <InputBoxInput
-            className="login-input"
             onChange={onChange}
             name="email"
             value={email}
-            placeholder="Email"
+            placeholder="Please enter your email."
             type="email"
             required
             id="email"
@@ -114,21 +118,18 @@ export default function CreateAccount({
         <InputBox>
           <InputBoxLabel htmlFor="password">Password</InputBoxLabel>
           <InputBoxInput
-            className="login-input"
             onChange={onChange}
             value={password}
             name="password"
-            placeholder="Password"
+            placeholder="Please enter your password."
             type="password"
             required
             id="password"
           />
         </InputBox>
-        <InputBoxInput
-          type="submit"
-          value={isLoading ? "Loading..." : "Create Account"}
-          className="eng"
-        />
+        <InputButton type="submit" className="eng">
+          {isLoading ? "Loading..." : "Create Account"}
+        </InputButton>
       </Form>
       {error !== "" ? <Error>{error}</Error> : null}
       <SocialBtnWrap>

@@ -30,8 +30,8 @@ export const InputBoxInput = styled.input`
   color: white;
   padding: 4px;
 
-  &.login-input {
-    border: 1px solid red;
+  &::placeholder {
+    color: #eee;
   }
 `;
 

@@ -6,7 +6,8 @@ import { auth } from "../firebase";
 import {
   Container,
   Form,
-  Input,
+  InputBoxInput,
+  InputButton,
   Switcher,
   LeftSide,
   RightSide,
@@ -19,7 +20,7 @@ import {
   Video,
 } from "../style/Account";
 import GithubButton from "../components/github-btn";
-import { InputBox } from "../style/Tweet";
+import { InputBox, InputBoxLabel } from "../style/Tweet";
 import CreateAccount from "./create-account";
 
 export default function Login() {
@@ -82,38 +83,36 @@ export default function Login() {
           <>
             <Form onSubmit={onSubmit}>
               <InputBox>
-                <label htmlFor="email" className="eng">
+                <InputBoxLabel htmlFor="email" className="eng">
                   Email
-                </label>
-                <Input
+                </InputBoxLabel>
+                <InputBoxInput
                   onChange={onChange}
                   name="email"
                   value={email}
-                  placeholder="Email"
+                  placeholder="Please enter your email."
                   type="email"
                   id="email"
                   required
                 />
               </InputBox>
               <InputBox>
-                <label htmlFor="password" className="eng">
+                <InputBoxLabel htmlFor="password" className="eng">
                   Password
-                </label>
-                <Input
+                </InputBoxLabel>
+                <InputBoxInput
                   onChange={onChange}
                   value={password}
                   name="password"
-                  placeholder="Password"
+                  placeholder="Please enter your password."
                   type="password"
                   id="password"
                   required
                 />
               </InputBox>
-              <Input
-                type="submit"
-                value={isLoading ? "Loading..." : "Log in"}
-                className="eng"
-              />
+              <InputButton type="submit" className="eng">
+                {isLoading ? "Loading..." : "Log in"}
+              </InputButton>
             </Form>
             {error !== "" ? <Error>{error}</Error> : null}
 
