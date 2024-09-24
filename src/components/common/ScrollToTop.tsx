@@ -20,6 +20,10 @@ const ScrollTopBtn = styled(Button)`
   opacity: 0;
   z-index: 999;
 
+  @media screen and (max-width: 991px) {
+    bottom: 7rem;
+  }
+
   &.visible {
     opacity: 1;
     visibility: visible;

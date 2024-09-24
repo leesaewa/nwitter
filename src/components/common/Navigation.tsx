@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 
 const Header = styled.header`
   position: fixed;
+  /* position: sticky;
+  top: 0; */
   width: 100%;
   border-bottom: 1.5px solid maroon;
   transition: all 0.5s ease-in-out;
@@ -67,12 +69,38 @@ const LogoTitle = styled.h1`
   }
 `;
 
-const Menu = styled.nav``;
+const Menu = styled.nav`
+  position: fixed;
+  top: 20px;
+  right: 0;
+  z-index: 10;
+  transition: all 0.5s ease-in-out;
+
+  &.scrolled {
+    top: 2px;
+  }
+
+  @media screen and (max-width: 991px) {
+    top: auto;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(6px);
+
+    &.scrolled {
+      top: auto;
+    }
+  }
+`;
 
 const MenuInner = styled.ul`
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+
+  @media screen and (max-width: 991px) {
+    justify-content: space-between;
+  }
 `;
 
 const MenuItem = styled.li`
@@ -125,39 +153,42 @@ export default function Navigation() {
   }, []);
 
   return (
-    <Header className={scrolled ? "scrolled" : ""}>
-      <div>
-        <LogoWrap>
-          <Link to="/">
-            <Logo src="/logo.png" alt="" />
-            <LogoTitle className="eng">
-              THE DAILY <em>P</em>ROPHET
-            </LogoTitle>
-          </Link>
-        </LogoWrap>
-        <Menu>
-          <MenuInner>
-            <MenuItem>
-              <Link to="/profile">
-                <HiMiniUserCircle />
-                <MenuText className="eng">My Page</MenuText>
-              </Link>
-            </MenuItem>
-            <MenuItem>
-              <Link to="/">
-                <HiMiniMagnifyingGlass />
-                <MenuText className="eng">Search</MenuText>
-              </Link>
-            </MenuItem>
-            <MenuItem className="log-out" onClick={onLogOut}>
-              <Link to="">
-                <HiOutlineArrowLeftOnRectangle />
-                <MenuText className="eng">Logout</MenuText>
-              </Link>
-            </MenuItem>
-          </MenuInner>
-        </Menu>
-      </div>
-    </Header>
+    <>
+      <Header className={scrolled ? "scrolled" : ""}>
+        <div>
+          <LogoWrap>
+            <Link to="/">
+              <Logo src="/logo.png" alt="" />
+              <LogoTitle className="eng">
+                THE DAILY <em>P</em>ROPHET
+              </LogoTitle>
+            </Link>
+          </LogoWrap>
+        </div>
+      </Header>
+
+      <Menu className={scrolled ? "scrolled" : ""}>
+        <MenuInner>
+          <MenuItem>
+            <Link to="/profile">
+              <HiMiniUserCircle />
+              <MenuText className="eng">My Page</MenuText>
+            </Link>
+          </MenuItem>
+          <MenuItem>
+            <Link to="/">
+              <HiMiniMagnifyingGlass />
+              <MenuText className="eng">Search</MenuText>
+            </Link>
+          </MenuItem>
+          <MenuItem className="log-out" onClick={onLogOut}>
+            <Link to="">
+              <HiOutlineArrowLeftOnRectangle />
+              <MenuText className="eng">Logout</MenuText>
+            </Link>
+          </MenuItem>
+        </MenuInner>
+      </Menu>
+    </>
   );
 }

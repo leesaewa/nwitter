@@ -42,6 +42,10 @@ const ModalOpenBtn = styled(Button)`
   border-radius: 50%;
   font-size: 1em;
 
+  @media screen and (max-width: 991px) {
+    bottom: 3.8rem;
+  }
+
   &:hover {
     background-color: #4c0202;
   }
