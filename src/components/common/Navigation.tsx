@@ -10,8 +10,6 @@ import { useEffect, useState } from "react";
 
 const Header = styled.header`
   position: fixed;
-  /* position: sticky;
-  top: 0; */
   width: 100%;
   border-bottom: 1.5px solid maroon;
   transition: all 0.5s ease-in-out;
@@ -63,6 +61,10 @@ const LogoTitle = styled.h1`
   width: 100%;
   transition: all 0.5s ease-in-out;
 
+  @media screen and (max-width: 991px) {
+    font-size: 1.4em;
+  }
+
   em {
     color: #ffd020;
     -webkit-text-stroke: 1px maroon;
@@ -86,6 +88,8 @@ const Menu = styled.nav`
     width: 100%;
     background-color: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(6px);
+    padding: 4px 20px;
+    border-top: 1.5px solid maroon;
 
     &.scrolled {
       top: auto;

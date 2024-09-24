@@ -43,7 +43,7 @@ const ModalOpenBtn = styled(Button)`
   font-size: 1em;
 
   @media screen and (max-width: 991px) {
-    bottom: 3.8rem;
+    bottom: 4rem;
   }
 
   &:hover {
